@@ -1,0 +1,277 @@
+*{
+    box-sizing: border-box;
+}
+body{
+    height: 100vh;
+    color: rgb(81,90,102);
+    display: flex;
+    flex-direction: column;
+}
+header{
+    overflow: hidden;
+    overflow-x: scroll;
+
+    background: white;
+
+    scrollbar-width: none;
+
+    border-bottom: 1px solid #000;
+}
+main{
+    flex: 1;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    
+    position: relative;
+
+    padding: 0 30px;
+}
+
+footer{
+    padding: 0 30px;
+    height: 60px;
+    border-top: 1px solid #000;
+}
+header::-webkit-scrollbar { 
+    display: none; 
+}
+
+.h_wrap{
+    position: relative;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+
+    padding: 8px 0;
+
+    user-select: none;
+}
+.h_wrap::after{
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 30px;
+    right: 30px;
+    height: 1px;
+
+    background: rgb(236, 239, 241);
+}
+
+.h_wrap > :first-child{
+    margin-left: 30px;
+}
+.h_wrap > :last-child{
+    margin-right: 30px;
+}
+
+.date{
+    flex: 0;
+    flex-basis: 85px;
+    height: 85px;
+    border-radius: 26px;
+    color: rgb(64,73,84);
+    margin: 0 10px;
+    text-align: center;
+
+    cursor: pointer;
+}
+.date.today{
+    color: rgb(115, 186, 225);
+}
+.date.selected{
+    color: white;
+    background: rgb(115, 186, 225);
+}
+.date__wrap{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+}
+.date__day,
+.date__wday{
+    font-size: 20px;
+    white-space: nowrap;
+}
+.date__day{
+    font-size: 25px;
+}
+
+.toolbar{
+    padding: 24px 30px;
+    height: 120px;
+    font-size: 20px;
+    user-select: none;
+    font-weight: 500
+}
+.toobar__wrap{
+    height: 100%;
+    display: flex;
+    position: relative;
+    flex-direction: column;
+}
+.row{
+    display: inline-block;
+    white-space: nowrap;
+    line-height: 1.6em;
+}
+*[opc]{
+    opacity: .5
+}
+*[big]{
+    font-size: 25px;
+}
+
+.toolset{
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.tool{
+    width: 70px;
+    height: 70px;
+    cursor: pointer;
+    background: rgba(101,175,128,0.2)
+}
+.tool + .tool{
+    margin-left: 10px;
+}
+.tool.add{
+    position: relative;
+}
+.tool.add:before,
+.tool.add:after{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+.tool.add:before{
+    border-radius: 100%;
+    background: rgb(115, 186, 225);
+}
+.tool.add:after{
+    background: url(plus.svg) center no-repeat;
+}
+
+.tasklist-wrap{
+    display: flex;
+
+    user-select: none;
+    position: relative;
+
+    min-height: 100%;
+    background: url(line.svg);
+}
+.timeline{
+    width: 120px;
+    border-right: 1px solid #000;
+}
+.timestamp{
+    padding: 10px 0;
+    border-bottom: 1px solid #dfdee0;
+
+    height: 150px;
+    min-height: 150px;
+    max-height: 150px;
+
+    background: white;
+
+    font-size: 50px;
+    color: #777778;
+    text-align: center;
+}
+.tasklist{
+    flex: 1;
+    overflow: hidden;
+}
+.task{
+    border-radius: 20px;
+    
+    background: rgba(91,158,116,1);
+
+    min-height: 300px;
+    margin: 10px 0 10px 30px;
+    position: relative;
+    
+    color: white;
+    font-size: 18px;
+    font-weight: 300;
+
+    padding-bottom: 50px;
+}
+.task .task__info{
+    padding: 20px;
+    min-height: 130px;
+    border-radius: 20px;
+    background: rgba(101,175,128,1);
+}
+.task .task__name{
+    margin-bottom: 20px;
+}
+.task .task__name span{
+    opacity: .7;
+}
+.task .task__tinfo{
+    position: absolute;
+
+    left: 0;
+    right: 0;
+    bottom: 20px;
+
+    padding: 0 20px;
+}
+
+.bpanel{
+    overflow: hidden;
+
+    position: fixed;
+
+    top: 100%;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    
+    background: white;
+
+    -webkit-box-shadow: 0px -10px 70px 3px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px -10px 70px 3px rgba(0,0,0,0.75);
+    box-shadow: 0px -10px 70px 3px rgba(0,0,0,0.75);
+
+    transition: .2s ease;
+    
+    padding: 0 30px;
+}
+.bpanel.show{
+    top: 0;
+}
+.bpanel__toolset{
+    height: 120px;
+    position: relative;
+}
+.bpanel__wrap{
+    width: 100%;
+    height: calc(100vh - 120px);
+    
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+.bpanel__content{
+    width: 100%;
+}
+
+.text-btn{
+    cursor: pointer;
+    font-size: 25px;
+    user-select: none;
+}

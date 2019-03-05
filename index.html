@@ -1,0 +1,78 @@
+<head>
+    <link rel="stylesheet" href="normilize.css"> 
+    <link rel="stylesheet" href="style.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=0.5">
+</head>
+<body>
+    <header>
+        <div class="h_wrap">
+            <div class="date" onclick="selectDate(this)">
+                <div class="date__wrap">
+                    <span class="date__wday">SUN</span>
+                    <span class="date__day">24</span>
+                </div>
+            </div>
+            <div class="date selected" onclick="selectDate(this)">
+                <div class="date__wrap">
+                    <span class="date__wday">MON</span>
+                    <span class="date__day">25</span>
+                </div>
+            </div>
+            <div class="date today" onclick="selectDate(this)">
+                <div class="date__wrap">
+                    <span class="date__wday">TUE</span>
+                    <span class="date__day">26</span>
+                </div>
+            </div>
+        </div>
+        <div class="toolbar">
+            <div class="toobar__wrap">
+                <div class="row">
+                    <b id="sel-date">Tue, Feb 26</b>
+                    <span opc id="sel-date-cost">, $36.7</span>
+                </div>
+                <div class="row logged-data">
+                    <b big>5 meetings</b>
+                    <span opc>, 5h free</span>
+                </div>
+                <div class="toolset">
+                    <div class="tool"></div>
+                    <div class="tool"></div>
+                    <div class="tool add" bpan-call="addTask" onclick="openBPanel(this)"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main>
+        <div class="tasklist-wrap">
+            <div id="timeline" class="timeline"></div>
+            <div id="tasklist" class="tasklist">
+
+            </div>
+        </div>
+    </main>
+
+    <footer>
+
+    </footer>
+
+    <div bpan-data="addTask" class="bpanel">
+        <div class="bpanel__toolset">
+            <div class="toolset">
+                <div class="text-btn bpanel__close" onclick="closeBPanel()">Готово</div>
+            </div>
+        </div>
+        <div class="bpanel__wrap">
+            <div class="bpanel__content">
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <script src="data.js"></script>
+    <script src="templates.js"></script>
+    <script src="common.js"></script>
+</body>
