@@ -49,10 +49,17 @@ function openBPanel(el){
 }
 
 
-class ToolSet{
-
-    setDate(timestap){
-
+class ToolBar{
+    setDate(timestamp){
+        return getEls('#sel-date')[0].innerHTML = `${wday}, ${month} ${date}`;
     }
-
+    setCost(cost){
+        return getEls('#sel-date-cost')[0].innerHTML = `, $${cost}`;
+    }
+    setShortPlan(){
+        return getEls('#day-short-plan')[0].innerHTML = `${count} meetings`;
+    }
+    setAddictionData(data){
+        return getEls('#day-addc-data')[0].innerHTML = `, ${data}h free`;
+    }
 }

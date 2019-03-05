@@ -1,7 +1,21 @@
 *{
     box-sizing: border-box;
 }
+@font-face{
+    font-family: LuciaGrade;
+    src: url("../fonts/LG.ttf");
+}
+@font-face{
+    font-family: AvenirReg;
+    src: url("../fonts/AvenirNextCyr-Regular.ttf");
+}
+@font-face{
+    font-family: AvenirMed;
+    src: url("../fonts/AvenirNextCyr-Medium.ttf");
+}
 body{
+    font-family: AvenirMed;
+
     height: 100vh;
     color: rgb(81,90,102);
     display: flex;
