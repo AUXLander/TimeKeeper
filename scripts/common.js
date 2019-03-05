@@ -3,16 +3,13 @@ function getEls(qSelector){
 }
 
 function selectDate(el){
-    let dateElems = getEls(`.date`);
-    for(let i=0;i<dateElems.length;i++){
-        dateElems[i].classList.remove(`selected`);
-    }
+    getEls(`.date.selected`)[0].classList.remove(`selected`);
     el.classList.add(`selected`);
 }
 
 function timeStandart(tObject){
-    h = tObject.h;
-    m = tObject.m;
+    let h = tObject.h;
+    let m = tObject.m;
     h = (h + m/60|0) % 24;
     m = m % 60;
     return tObject(h, m);
@@ -23,16 +20,13 @@ function loadTimestamps(){
     const msta = data.time.start.m;
     const hspl = data.time.split.h;
     const mspl = data.time.split.m;
-
     let mins = (data.time.end.h - hsta)*60 + msta + data.time.end.m;
-    let countStamps = mins / (hspl*60 + mspl);
+    let countStamps = mins/(hspl*60 + mspl);
     let timeline = getEls('#timeline')[0];
-
     for(let i = 0; i < countStamps; i++){
         timeline.appendChild(tstamp(hsta + i*hspl, msta + i*mspl));
     }
-
-    return;
+    return countStamps;
 }
 
 
@@ -41,10 +35,9 @@ function loadTimeline(){
 }
 
 function addTask(){
-    let tasklist = getEls('#tasklist')[0];
-    tasklist.appendChild(tnote({'name':'Задача','project':'Проект','type':'Работа'}));
-
-    return;
+    return getEls('#tasklist')[0].appendChild(
+        tnote({'name':'Задача','project':'Проект','type':'Работа'})
+    );
 }
 
 function closeBPanel(){

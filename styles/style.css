@@ -93,6 +93,7 @@ header::-webkit-scrollbar {
 .date__wday{
     font-size: 20px;
     white-space: nowrap;
+    text-transform: uppercase;
 }
 .date__day{
     font-size: 25px;
@@ -161,7 +162,7 @@ header::-webkit-scrollbar {
     background: rgb(115, 186, 225);
 }
 .tool.add:after{
-    background: url(plus.svg) center no-repeat;
+    background: url(../img/icons/plus.svg) center no-repeat;
 }
 
 .tasklist-wrap{
@@ -171,7 +172,7 @@ header::-webkit-scrollbar {
     position: relative;
 
     min-height: 100%;
-    background: url(line.svg);
+    background: url(../img/other/line.svg);
 }
 .timeline{
     width: 120px;
