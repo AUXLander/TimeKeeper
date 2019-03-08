@@ -1,6 +1,9 @@
 *{
     box-sizing: border-box;
 }
+[hidden]{
+    display: none !important;
+}
 @font-face{
     font-family: LuciaGrade;
     src: url("../fonts/LG.ttf");
@@ -37,15 +40,12 @@ main{
     overflow-y: scroll;
     
     position: relative;
-
-    padding: 0 30px;
+}
+sup{
+    left: -10px;
 }
 
-footer{
-    padding: 0 30px;
-    height: 60px;
-    border-top: 1px solid #000;
-}
+
 header::-webkit-scrollbar { 
     display: none; 
 }
@@ -127,6 +127,7 @@ header::-webkit-scrollbar {
     flex-direction: column;
 }
 .row{
+    flex: 1;
     display: inline-block;
     white-space: nowrap;
     line-height: 1.6em;
@@ -137,47 +138,19 @@ header::-webkit-scrollbar {
 *[big]{
     font-size: 25px;
 }
-
-.toolset{
+.toolbar__toolset{
     position: absolute;
     top: 0;
     right: 0;
     bottom: 0;
-
+}
+.toolset{
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
     align-items: center;
 }
 
-.tool{
-    width: 70px;
-    height: 70px;
-    cursor: pointer;
-    background: rgba(101,175,128,0.2)
-}
-.tool + .tool{
-    margin-left: 10px;
-}
-.tool.add{
-    position: relative;
-}
-.tool.add:before,
-.tool.add:after{
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-}
-.tool.add:before{
-    border-radius: 100%;
-    background: rgb(115, 186, 225);
-}
-.tool.add:after{
-    background: url(../img/icons/plus.svg) center no-repeat;
-}
 
 .tasklist-wrap{
     display: flex;
@@ -187,36 +160,47 @@ header::-webkit-scrollbar {
 
     min-height: 100%;
     background: url(../img/other/line.svg);
+
+    margin: 0 30px;
 }
 .timeline{
     width: 120px;
+    padding-right: 10px;
+    background: white;
     border-right: 1px solid #000;
+    
+
+    font-size: 40px;
+    color: #777778;
 }
 .timestamp{
-    padding: 10px 0;
-    border-bottom: 1px solid #dfdee0;
-
+    
     height: 150px;
+    
     min-height: 150px;
     max-height: 150px;
 
-    background: white;
+    padding: 10px 0;
+    border-bottom: 1px solid #dfdee0;
 
-    font-size: 50px;
-    color: #777778;
-    text-align: center;
+    white-space: nowrap;
+    text-align: right;
 }
 .tasklist{
     flex: 1;
     overflow: hidden;
 }
 .task{
+    position: absolute;
+    left: initial !important;
+    right: initial !important;
+
     border-radius: 20px;
     
     background: rgba(91,158,116,1);
 
     min-height: 300px;
-    margin: 10px 0 10px 30px;
+    margin: 0 30px;
     position: relative;
     
     color: white;
@@ -224,12 +208,18 @@ header::-webkit-scrollbar {
     font-weight: 300;
 
     padding-bottom: 50px;
+
+    cursor: pointer;
 }
 .task .task__info{
     padding: 20px;
     min-height: 130px;
     border-radius: 20px;
     background: rgba(101,175,128,1);
+
+    max-height: 100%;
+
+    display: flex;
 }
 .task .task__name{
     margin-bottom: 20px;
@@ -245,6 +235,13 @@ header::-webkit-scrollbar {
     bottom: 20px;
 
     padding: 0 20px;
+}
+.task .task__notes p{
+    margin: 0;
+}
+.task__wrap{
+    max-height: 100%;
+    overflow: hidden;
 }
 
 .bpanel{
@@ -289,4 +286,13 @@ header::-webkit-scrollbar {
     cursor: pointer;
     font-size: 25px;
     user-select: none;
+}
+
+footer{
+    padding: 0 30px;
+    border-top: 1px solid #000;
+}
+.footer__wrap{
+    margin: 10px 0;
+    justify-content: flex-start;
 }

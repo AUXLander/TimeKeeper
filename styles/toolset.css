@@ -1,0 +1,32 @@
+.tool{
+    width: 70px;
+    height: 70px;
+    cursor: pointer;
+    background: rgba(101,175,128,0.2);
+}
+.tool + .tool{
+    margin-left: 10px;
+}
+.tool.add{
+    position: relative;
+}
+.tool.add:before,
+.tool.add:after{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+.tool.add:before{
+    border-radius: 100%;
+    background: rgb(115, 186, 225);
+}
+.tool.add:after{
+    background: url(../img/icons/plus.svg) center no-repeat;
+}
+/* === ===*/
+.tool.calendar{
+    background: url(../img/icons/calendar.svg) center no-repeat;
+}

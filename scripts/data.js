@@ -1,18 +1,17 @@
+const UTHou = 3600;
+const UTMin = 60;
+const UTSec = 60;
 var data = 
     {
+        'tasks':{
+            'currentLoadedCount' : 0
+        },
         'time' : {
-            'start': {
-                'h': 5,
-                'm': 0
-            },
-            'end'  : {
-                'h': 24,
-                'm': 0
-            },
-            'split': {
-                'h': 1,
-                'm': 0
-            }
+            'start' : UTHou * 5,
+            'end'   : UTHou * 24,
+            'split' : UTHou,
+            'height': 150,
+            'scale' : 150 / UTHou
         }
 
     }

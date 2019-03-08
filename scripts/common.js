@@ -4,27 +4,25 @@ function getEls(qSelector){
 
 function selectDate(el){
     getEls(`.date.selected`)[0].classList.remove(`selected`);
-    el.classList.add(`selected`);
+    return el.classList.add(`selected`);
 }
 
 function timeStandart(tObject){
-    let h = tObject.h;
-    let m = tObject.m;
-    h = (h + m/60|0) % 24;
-    m = m % 60;
-    return tObject(h, m);
+    return tObject((tObject.h+m/60|0)%24,m%60);
 }
 
 function loadTimestamps(){
-    const hsta = data.time.start.h;
-    const msta = data.time.start.m;
-    const hspl = data.time.split.h;
-    const mspl = data.time.split.m;
-    let mins = (data.time.end.h - hsta)*60 + msta + data.time.end.m;
-    let countStamps = mins/(hspl*60 + mspl);
+    let styleConteiner = getEls('.calendar-style')[0];
+    styleConteiner.innerHTML += `
+        .timestamp{
+            height: ${data.time.height}px;
+        }
+    `;
+    
+    let countStamps = ((data.time.end - data.time.start)/data.time.split)|0;
     let timeline = getEls('#timeline')[0];
     for(let i = 0; i < countStamps; i++){
-        timeline.appendChild(tstamp(hsta + i*hspl, msta + i*mspl));
+        timeline.appendChild(tstamp(tObject(data.time.start + data.time.split*i)));
     }
     return countStamps;
 }
@@ -36,7 +34,14 @@ function loadTimeline(){
 
 function addTask(){
     return getEls('#tasklist')[0].appendChild(
-        tnote({'name':'Задача','project':'Проект','type':'Работа'})
+        tnote({
+            'name'      :   'Задача',
+            'project'   :   'Проект',
+            'type'      :   'Работа',
+            'notes'     :   '',
+            'start'     :   (UTHou*8),
+            'end'       :   (UTHou*10.3)
+        })
     );
 }
 
@@ -48,6 +53,22 @@ function openBPanel(el){
     return getEls(`[bpan-data=${el.getAttribute('bpan-call')}`)[0].classList.add('show');
 }
 
+function choosePage(toolbutton){
+    let pageBlocks;
+    let forPage = toolbutton.getAttribute('for-page');
+    if(document.body.getAttribute(`current-page`) == forPage){
+        return;
+    }
+
+    pageBlocks = getEls(`[page]:not(${forPage})`);
+    for(let i=0;i<pageBlocks.length;i++){
+        pageBlocks[i].setAttribute('hidden','');
+    }
+    pageBlocks = getEls(`[page="${forPage}"]`);
+    for(let i=0;i<pageBlocks.length;i++){
+        pageBlocks[i].removeAttribute('hidden');
+    }
+}
 
 class ToolBar{
     setDate(timestamp){

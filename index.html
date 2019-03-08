@@ -1,12 +1,15 @@
 <head>
+    <meta charset="utf-8"> 
+
     <link rel="stylesheet" href="styles/normilize.css"> 
     <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/toolset.css">
 
     <meta name="viewport" content="width=device-width, initial-scale=0.5">
 </head>
-<body>
+<body current-page="calendar">
     <header>
-        <div class="h_wrap">
+        <div page="calendar" class="h_wrap">
             <div class="date" onclick="selectDate(this)">
                 <div class="date__wrap">
                     <span class="date__wday">SUN</span>
@@ -26,7 +29,7 @@
                 </div>
             </div>
         </div>
-        <div class="toolbar">
+        <div page="calendar" class="toolbar header__calendar">
             <div class="toobar__wrap">
                 <div class="row">
                     <b id="sel-date">Tue, Feb 26</b>
@@ -36,7 +39,7 @@
                     <b id="day-short-plan" big>5 meetings</b>
                     <span id="day-addc-data" opc>, 5h free</span>
                 </div>
-                <div class="toolset">
+                <div class="toolbar__toolset toolset">
                     <div class="tool"></div>
                     <div class="tool"></div>
                     <div class="tool add" bpan-call="addTask" onclick="openBPanel(this)"></div>
@@ -45,7 +48,7 @@
         </div>
     </header>
     <main>
-        <div class="tasklist-wrap">
+        <div page="calendar" class="tasklist-wrap">
             <div id="timeline" class="timeline"></div>
             <div id="tasklist" class="tasklist">
 
@@ -54,7 +57,10 @@
     </main>
 
     <footer>
-
+        <div class="footer__wrap toolset">
+            <div for-page="calendar" class="tool calendar" onclick="choosePage(this)"></div>
+            <div class="tool"></div>
+        </div>
     </footer>
 
     <div bpan-data="addTask" class="bpanel">
@@ -75,4 +81,9 @@
     <script src="scripts/data.js"></script>
     <script src="scripts/templates.js"></script>
     <script src="scripts/common.js"></script>
+
+    <style class="calendar-style">
+        
+    </style>
+
 </body>
