@@ -1,3 +1,4 @@
+document.addEventListener("touchstart", function(){}, true);
 class TimeKeeper{
     constructor(){
         this.DateControl = new DateControl();
@@ -6,7 +7,7 @@ class TimeKeeper{
     }
     openPage(page){
         let pageBlocks;
-        
+
         if(document.body.getAttribute(`current-page`) == page){
             return;
         }
@@ -45,7 +46,7 @@ class DateControl{
         }
         $('#dateline .date')[7].classList.add('today', 'selected');
         let hWrapEl = $('.header__date')[0];
-        hWrapEl.scrollLeft = hWrapEl.offsetWidth / 2;
+        hWrapEl.scrollLeft = hWrapEl.offsetWidth / 2 - 42;
     }
 }
 

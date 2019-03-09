@@ -1,7 +1,7 @@
 function selectDate(el){
-    $(`.date.selected`)[0].classList.remove(`selected`);
-    Application.ToolBar.updateDate(el.getAttribute("data-date"));
-    return el.classList.add(`selected`);
+    $('.date.selected')[0].classList.remove('selected');
+    Application.ToolBar.updateDate(el.getAttribute('data-date'));
+    return el.classList.add('selected');
 }
 
 function closeBPanel(){
