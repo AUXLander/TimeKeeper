@@ -1,3 +1,5 @@
+const UTWee = 604800;
+const UTDay = 86400;
 const UTHou = 3600;
 const UTMin = 60;
 const UTSec = 60;

@@ -1,86 +1,112 @@
-function getEls(qSelector){
-    return document.querySelectorAll(qSelector);
-}
-
-function selectDate(el){
-    getEls(`.date.selected`)[0].classList.remove(`selected`);
-    return el.classList.add(`selected`);
-}
-
-function timeStandart(tObject){
-    return tObject((tObject.h+m/60|0)%24,m%60);
-}
-
-function loadTimestamps(){
-    let styleConteiner = getEls('.calendar-style')[0];
-    styleConteiner.innerHTML += `
-        .timestamp{
-            height: ${data.time.height}px;
+class TimeKeeper{
+    constructor(){
+        this.DateControl = new DateControl();
+        this.ToolBar = new ToolBar();
+        this.TaskList = new TaskList();
+    }
+    openPage(page){
+        let pageBlocks;
+        
+        if(document.body.getAttribute(`current-page`) == page){
+            return;
         }
-    `;
-    
-    let countStamps = ((data.time.end - data.time.start)/data.time.split)|0;
-    let timeline = getEls('#timeline')[0];
-    for(let i = 0; i < countStamps; i++){
-        timeline.appendChild(tstamp(tObject(data.time.start + data.time.split*i)));
+        pageBlocks = $(`[page]:not(${page})`);
+        for(let i=0;i<pageBlocks.length;i++){
+            pageBlocks[i].setAttribute('hidden','');
+        }
+        pageBlocks = $(`[page="${page}"]`);
+        for(let i=0;i<pageBlocks.length;i++){
+            pageBlocks[i].removeAttribute('hidden');
+        }
     }
-    return countStamps;
 }
 
-
-function loadTimeline(){
-
-}
-
-function addTask(){
-    return getEls('#tasklist')[0].appendChild(
-        tnote({
-            'name'      :   'Задача',
-            'project'   :   'Проект',
-            'type'      :   'Работа',
-            'notes'     :   '',
-            'start'     :   (UTHou*8),
-            'end'       :   (UTHou*10.3)
-        })
-    );
-}
-
-function closeBPanel(){
-    return getEls('.bpanel.show')[0].classList.remove('show');
-}
-
-function openBPanel(el){
-    return getEls(`[bpan-data=${el.getAttribute('bpan-call')}`)[0].classList.add('show');
-}
-
-function choosePage(toolbutton){
-    let pageBlocks;
-    let forPage = toolbutton.getAttribute('for-page');
-    if(document.body.getAttribute(`current-page`) == forPage){
-        return;
+class DateControl{
+    constructor(){
+        this.dateLine = $('#dateline')[0];
+        this.loadDate();
     }
-
-    pageBlocks = getEls(`[page]:not(${forPage})`);
-    for(let i=0;i<pageBlocks.length;i++){
-        pageBlocks[i].setAttribute('hidden','');
+    addDate(timestamp){
+        let day = new Date(timestamp).getDay();
+        dateLine.appendChild(tDate(WDayName[day],day));
     }
-    pageBlocks = getEls(`[page="${forPage}"]`);
-    for(let i=0;i<pageBlocks.length;i++){
-        pageBlocks[i].removeAttribute('hidden');
+    loadDate(){
+        let date = new Date(Date.now() - UTWee*1000);
+        let dateVal = date.getDate();
+        let dayName = date.getDay();
+        for(let i=0;i<14;i++) {
+            this.dateLine.appendChild(
+                tDate(
+                    WDayName[(dayName + i) % 7],
+                    dateVal + i,
+                    `${date.getFullYear()}-${date.getMonth()}-${dateVal + i}`
+                    )
+            );
+        }
+        $('#dateline .date')[7].classList.add('today', 'selected');
+        let hWrapEl = $('.header__date')[0];
+        hWrapEl.scrollLeft = hWrapEl.offsetWidth / 2;
     }
 }
 
 class ToolBar{
-    setDate(timestamp){
-        return getEls('#sel-date')[0].innerHTML = `${wday}, ${month} ${date}`;
+    constructor(){
+        this.updateDate();
+    }
+    updateDate(timestring = ""){
+        let tempDate = new Date(timestring);
+        if(tempDate == "Invalid Date"){
+            tempDate = new Date();
+            console.log('%cToolBar: Invalide Date Detected!', 'background: #222; color: #bada55');
+        }
+        this.setDate(
+            WDayName[tempDate.getDay()],
+            tempDate.getDate(),
+            MonthName[tempDate.getMonth()]
+        );
+    }
+    setDate(wday, date, month){
+        return $('#sel-date')[0].innerHTML = `${wday}, ${month} ${date}`;
     }
     setCost(cost){
-        return getEls('#sel-date-cost')[0].innerHTML = `, $${cost}`;
+        return $('#sel-date-cost')[0].innerHTML = `, $${cost}`;
     }
     setShortPlan(){
-        return getEls('#day-short-plan')[0].innerHTML = `${count} meetings`;
+        return $('#day-short-plan')[0].innerHTML = `${count} meetings`;
     }
     setAddictionData(data){
-        return getEls('#day-addc-data')[0].innerHTML = `, ${data}h free`;
+        return $('#day-addc-data')[0].innerHTML = `, ${data}h free`;
     }
 }
+
+class TaskList{
+    constructor(){
+        this.loadTimestamps();
+    }
+    loadTimestamps(){
+        $('.calendar-style')[0].innerHTML += `.timestamp{height: ${data.time.height}px}`;
+        
+        let countStamps = ((data.time.end - data.time.start)/data.time.split)|0;
+        let timeline = $('#timeline')[0];
+        for(let i = 0; i < countStamps; i++){
+            timeline.appendChild(tStamp(TObject(data.time.start + data.time.split*i)));
+        }
+        return countStamps;
+    }
+    addTask(){
+        return $('#tasklist')[0].appendChild(
+            tNote({
+                'name'      :   'Задача',
+                'project'   :   'Проект',
+                'type'      :   'Работа',
+                'notes'     :   '',
+                'start'     :   (UTHou*8),
+                'end'       :   (UTHou*10.3)
+            })
+        );
+    }
+}
+
+
+
+var Application = new TimeKeeper();

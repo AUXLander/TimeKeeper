@@ -41,26 +41,19 @@ main{
     
     position: relative;
 }
-sup{
-    left: -10px;
+.timestamp sup{
+    left: -5px;
 }
 
-
-header::-webkit-scrollbar { 
-    display: none; 
-}
-
-.h_wrap{
+.header__date{
     position: relative;
-    display: flex;
-    flex-wrap: nowrap;
-    flex-direction: row;
-
-    padding: 8px 0;
-
     user-select: none;
+    padding: 8px 0;
+    max-width: 100%;
+    overflow-x: scroll;
+    overflow-y: hidden;
 }
-.h_wrap::after{
+.header__date::after{
     content: '';
     position: absolute;
     bottom: -1px;
@@ -71,10 +64,17 @@ header::-webkit-scrollbar {
     background: rgb(236, 239, 241);
 }
 
-.h_wrap > :first-child{
+.dateline{
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+}
+
+
+.dateline > :first-child{
     margin-left: 30px;
 }
-.h_wrap > :last-child{
+.dateline > :last-child{
     margin-right: 30px;
 }
 
@@ -88,6 +88,7 @@ header::-webkit-scrollbar {
     text-align: center;
 
     cursor: pointer;
+    min-width: 85px;
 }
 .date.today{
     color: rgb(115, 186, 225);
@@ -185,6 +186,8 @@ header::-webkit-scrollbar {
 
     white-space: nowrap;
     text-align: right;
+
+    letter-spacing: -0.05em;
 }
 .tasklist{
     flex: 1;
@@ -201,7 +204,6 @@ header::-webkit-scrollbar {
 
     min-height: 300px;
     margin: 0 30px;
-    position: relative;
     
     color: white;
     font-size: 18px;
@@ -236,6 +238,9 @@ header::-webkit-scrollbar {
 
     padding: 0 20px;
 }
+.task .task__starts{
+    opacity: .5;
+}
 .task .task__notes p{
     margin: 0;
 }
@@ -255,10 +260,6 @@ header::-webkit-scrollbar {
     bottom: 0;
     
     background: white;
-
-    -webkit-box-shadow: 0px -10px 70px 3px rgba(0,0,0,0.75);
-    -moz-box-shadow: 0px -10px 70px 3px rgba(0,0,0,0.75);
-    box-shadow: 0px -10px 70px 3px rgba(0,0,0,0.75);
 
     transition: .2s ease;
     
