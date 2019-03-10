@@ -5,46 +5,97 @@
     <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" href="styles/toolset.css">
 
-    <meta name="viewport" content="width=device-width, initial-scale=0.6, user-scalable=no">
+    <meta name="google" content="notranslate">
+    <meta name="viewport" content="width=device-width, minimum-scale=0.6, initial-scale=0.6, maximum-scale=0.6, user-scalable=no">
 </head>
 <body current-page="calendar">
     <header>
-        <div page="calendar" class="header__date">
-            <div id="dateline" class="dateline">
+        <div page="calendar">
+            <div class="header__date">
+                <div id="dateline" class="dateline">
 
+                </div>
+            </div>
+            <div class="toolbar wrapper header__calendar">
+                <div class="toobar__wrap">
+                    <div class="row">
+                        <b id="sel-date">Tue, Feb 26</b>
+                        <span opc id="sel-date-cost">, $36.7</span>
+                    </div>
+                    <div class="row logged-data">
+                        <b id="day-short-plan" big>5 meetings</b>
+                        <span id="day-addc-data" opc>, 5h free</span>
+                    </div>
+                    <div class="toolbar__toolset toolset">
+                        <button class="tool"></button>
+                        <button class="tool"></button>
+                        <button class="tool add" bpan-call="addTask" onclick="javascript:openBPanel(this)"></button>
+                    </div>
+                </div>
             </div>
         </div>
-        <div page="calendar" class="toolbar header__calendar">
-            <div class="toobar__wrap">
-                <div class="row">
-                    <b id="sel-date">Tue, Feb 26</b>
-                    <span opc id="sel-date-cost">, $36.7</span>
-                </div>
-                <div class="row logged-data">
-                    <b id="day-short-plan" big>5 meetings</b>
-                    <span id="day-addc-data" opc>, 5h free</span>
-                </div>
-                <div class="toolbar__toolset toolset">
-                    <button class="tool"></button>
-                    <button class="tool"></button>
-                    <button class="tool add" bpan-call="addTask" onclick="javascript:openBPanel(this)"></button>
+        <div page="notes" hidden>
+            <div class="toolbar wrapper header__calendar">
+                <div class="toobar__wrap">
+                    <label class="row page-title">Notes</label>
+                    <div class="toolbar__toolset toolset">
+                        <button class="tool add"></button>
+                    </div>
                 </div>
             </div>
         </div>
     </header>
     <main>
-        <div page="calendar" class="tasklist-wrap">
+        <div page="calendar" class="wrapper tasklist-wrap">
             <div id="timeline" class="timeline"></div>
             <div id="tasklist" class="tasklist">
 
             </div>
         </div>
+        <div page="notes" id="notelist" class="wrapper notelist flexlist">
+            <div class="noteblock flexlist">
+                <label onclick="toggleNoteblock(this)">
+                    <span class="icon"></span>
+                    <span>Для дома</span>
+                </label>
+                <div class="noteblock__wrap flexlist">
+                    <div class="noteblock flexlist">
+                        <label onclick="toggleNoteblock(this)">
+                            <span class="icon"></span>
+                            <span>Купить</span>
+                        </label>
+                        <div class="noteblock__wrap flexlist">
+                           
+                        </div>
+                    </div>
+                    <div class="noteblock flexlist">
+                        <label onclick="toggleNoteblock(this)">
+                            <span class="icon"></span>
+                            <span>Куплено</span>
+                        </label>
+                        <div class="noteblock__wrap flexlist">
+                            <div class="noteblock flexlist">
+                                <label onclick="toggleNoteblock(this)">
+                                    <span class="icon"></span>
+                                    <span>Список продуктов в холодильнике</span>
+                                </label>
+                                <div class="noteblock__wrap flexlist">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div> 
     </main>
 
     <footer>
-        <div class="footer__wrap toolset">
+        <div class="footer__wrap wrapper toolset">
             <button for-page="calendar" class="tool calendar" onclick="choosePage(this)"></button>
-            <button class="tool"></button>
+            <button for-page="notes" class="tool list" onclick="choosePage(this)"></button>
         </div>
     </footer>
 

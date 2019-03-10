@@ -42,6 +42,9 @@ var userData = {
                 'end'       :   (UTHou*10.3)
             }
         ]
+    },
+    'noteData' : {
+        
     }
 }
 var data = 

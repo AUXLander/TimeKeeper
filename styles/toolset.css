@@ -30,3 +30,7 @@
 .tool.calendar{
     background: url(../img/icons/calendar.svg) center no-repeat;
 }
+/* === ===*/
+.tool.list{
+    background: url(../img/icons/list.svg) center no-repeat;
+}

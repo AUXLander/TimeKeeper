@@ -1,11 +1,19 @@
 html{
     -ms-touch-action: manipulation;
     touch-action: manipulation;
+    -webkit-text-size-adjust: none;
     -webkit-tap-highlight-color: rgba(0,0,0,0);
     user-select: none;
+
+    background: #fdfdfd;
 }
 *{
     box-sizing: border-box;
+    scrollbar-width: none;
+}
+::-webkit-scrollbar{
+    width: 0;
+    height: 0;
 }
 button{
     outline: 0;
@@ -41,8 +49,6 @@ body{
 header{
     overflow: hidden;
     overflow-x: scroll;
-
-    background: white;
 
     scrollbar-width: none;
 
@@ -86,7 +92,10 @@ main{
     flex-wrap: nowrap;
     flex-direction: row;
 }
-
+.wrapper{
+    margin-left: 30px !important;
+    margin-right: 30px !important;
+}
 
 .dateline > :first-child{
     margin-left: 30px;
@@ -132,7 +141,7 @@ main{
 }
 
 .toolbar{
-    padding: 24px 30px;
+    padding: 24px 0;
     height: 120px;
     font-size: 20px;
     user-select: none;
@@ -163,6 +172,7 @@ main{
     bottom: 0;
 }
 .toolset{
+    flex: 1;
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
@@ -178,13 +188,11 @@ main{
 
     min-height: 100%;
     background: url(../img/other/line.svg);
-
-    margin: 0 30px;
 }
 .timeline{
     width: 120px;
     padding-right: 10px;
-    background: white;
+    background: #fdfdfd;
     border-right: 1px solid #000;
     
 
@@ -229,6 +237,8 @@ main{
     padding-bottom: 50px;
 
     cursor: pointer;
+
+    margin-top: -1px;
 }
 .task .task__info{
     padding: 20px;
@@ -276,7 +286,7 @@ main{
     right: 0;
     bottom: 0;
     
-    background: white;
+    background: #fdfdfd;
 
     transition: .2s ease;
     
@@ -286,8 +296,9 @@ main{
     top: 0;
 }
 .bpanel__toolset{
-    height: 120px;
+    height: 80px;
     position: relative;
+    display: flex;
 }
 .bpanel__wrap{
     width: 100%;
@@ -304,13 +315,60 @@ main{
     cursor: pointer;
     font-size: 25px;
     user-select: none;
+    color: rgb(115, 186, 225);
 }
 
 footer{
-    padding: 0 30px;
     border-top: 1px solid #000;
 }
 .footer__wrap{
     margin: 10px 0;
     justify-content: flex-start;
+}
+.page-title{
+    font-size: 63px;
+    font-weight: 600;
+    color: rgb(64,73,84);
+    line-height: 1.14em;
+}
+.flexlist{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+.notelist{
+    position: relative;
+}
+
+.noteblock{
+    width: 100%;
+    overflow: hidden;
+    background: rgba(0,0,0,.1);
+
+    font-size: 35px;
+}
+.noteblock label{
+    width: 100%;
+    white-space: nowrap;
+    cursor: pointer;
+    overflow: hidden;
+
+    transition: .2s ease;
+    padding: 0 25px;
+
+    height: 90px;
+}
+.noteblock label span{
+    line-height: 2.4em;
+}
+.noteblock__wrap{
+    width: 100%;
+    padding-left: 30px;
+}
+.noteblock > .noteblock__wrap > .noteblock label{
+    height: 0;
+}
+.noteblock.show > .noteblock__wrap > .noteblock > label{
+    height: 90px;
 }

@@ -1,4 +1,5 @@
-document.addEventListener("touchstart", function(){}, true);
+document.addEventListener('touchstart',function(){}, true);
+document.addEventListener('gesturestart',function (e){e.preventDefault()});
 class TimeKeeper{
     constructor(app){
         this.Application = app;
@@ -9,7 +10,7 @@ class TimeKeeper{
     openPage(page){
         let pageBlocks;
 
-        if(document.body.getAttribute(`current-page`) == page){
+        if(document.body.getAttribute('current-page') == page){
             return;
         }
         pageBlocks = $(`[page]:not(${page})`);
@@ -20,6 +21,7 @@ class TimeKeeper{
         for(let i=0;i<pageBlocks.length;i++){
             pageBlocks[i].removeAttribute('hidden');
         }
+        document.body.setAttribute('current-page', page);
     }
 }
 
@@ -33,11 +35,6 @@ class DateControl{
         let day = new Date(timestamp).getDay();
         dateLine.appendChild(tDate(WDayName[day],day));
     }
-    static selectDate(el){
-        $('.date.selected')[0].classList.remove('selected');
-        ToolBar.updateDate(el.getAttribute('data-date'));
-        return el.classList.add('selected');
-    }
     loadDate(){
         let date = new Date(Date.now() - UTWee*1000);
         let dateVal = date.getDate();
@@ -47,7 +44,7 @@ class DateControl{
                 tDate(
                     WDayName[(dayName + i) % 7],
                     dateVal + i,
-                    `${date.getFullYear()}-${date.getMonth()}-${dateVal + i}`
+                    `${date.getFullYear()}/${date.getMonth()}/${dateVal + i}`
                 )
             );
         }
@@ -63,8 +60,8 @@ class ToolBar{
         this.Application = app;
         this.updateDate();
     }
-    updateDate(timestring = ""){
-        let tempDate = new Date(timestring);
+    updateDate(timestring){
+        let tempDate = new Date(timestring + ' 00:00:00');
         if(tempDate == "Invalid Date"){
             tempDate = new Date();
             console.log('%cToolBar: Invalide Date Detected!', 'background: #222; color: #bada55');
@@ -76,16 +73,16 @@ class ToolBar{
         );
     }
     setDate(wday, date, month){
-        return $('#sel-date')[0].innerHTML = `${wday}, ${month} ${date}`;
+        $('#sel-date')[0].innerHTML = `${wday}, ${month} ${date}`;
     }
     setCost(cost){
-        return $('#sel-date-cost')[0].innerHTML = `, $${cost}`;
+        $('#sel-date-cost')[0].innerHTML = `, $${cost}`;
     }
     setShortPlan(){
-        return $('#day-short-plan')[0].innerHTML = `${count} meetings`;
+        $('#day-short-plan')[0].innerHTML = `${count} meetings`;
     }
     setAddictionData(data){
-        return $('#day-addc-data')[0].innerHTML = `, ${data}h free`;
+        $('#day-addc-data')[0].innerHTML = `, ${data}h free`;
     }
 }
 
@@ -124,7 +121,7 @@ class TaskList{
     }
     addTask(objectTask){
         return $('#tasklist')[0].appendChild(
-            tNote(objectTask)
+            tTask(objectTask)
         );
     }
 }

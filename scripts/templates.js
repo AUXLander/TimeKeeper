@@ -21,7 +21,7 @@ var TObject = function(UTValue){
     return {'h' : h, 'm' : m};
 }
 
-var tNote = function(dataObject){
+var tTask = function(dataObject){
     dataObject.notes = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
     let UTDuration = dataObject.end - dataObject.start;
     let TODuration = TObject(UTDuration);
@@ -64,4 +64,27 @@ var tDate = function(dayName, date, fulldate=""){
             <span class="date__day">${date}</span>
         </div>`;
     return tdiv;
+}
+
+var tNoteblock = function(group, level, name, icon){
+    let tdiv = document.createElement('div');
+    tdiv.classList.add('noteblock', 'flexlist');
+    tdiv.setAttribute('data-group', '#ID');
+
+    tdiv.setAttribute('data-level', level);
+    
+
+    let twrap = document.createElement('div');
+    twrap.classList.add('noteblock__wrap', 'flexlist');
+
+    tdiv.appendChild(tNote(name, icon));
+    tdiv.appendChild(twrap);
+    
+    return tdiv;
+}
+var tNote = function(name, icon){
+    let tlab = document.createElement('label');
+    tlab.setAttribute('onclick', 'toggleNoteblock(this)');
+    tlab.innerHTML = `<span class="icon ${icon}"></span><span>${name}</span>`;
+    return tlab;
 }
