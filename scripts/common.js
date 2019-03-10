@@ -1,9 +1,10 @@
 document.addEventListener("touchstart", function(){}, true);
 class TimeKeeper{
-    constructor(){
-        this.DateControl = new DateControl();
-        this.ToolBar = new ToolBar();
-        this.TaskList = new TaskList();
+    constructor(app){
+        this.Application = app;
+        this.DateControl = new DateControl(app);
+        this.ToolBar = new ToolBar(app);
+        this.TaskList = new TaskList(app);
     }
     openPage(page){
         let pageBlocks;
@@ -23,13 +24,19 @@ class TimeKeeper{
 }
 
 class DateControl{
-    constructor(){
+    constructor(app){
+        this.Application = app;
         this.dateLine = $('#dateline')[0];
         this.loadDate();
     }
     addDate(timestamp){
         let day = new Date(timestamp).getDay();
         dateLine.appendChild(tDate(WDayName[day],day));
+    }
+    static selectDate(el){
+        $('.date.selected')[0].classList.remove('selected');
+        ToolBar.updateDate(el.getAttribute('data-date'));
+        return el.classList.add('selected');
     }
     loadDate(){
         let date = new Date(Date.now() - UTWee*1000);
@@ -41,17 +48,19 @@ class DateControl{
                     WDayName[(dayName + i) % 7],
                     dateVal + i,
                     `${date.getFullYear()}-${date.getMonth()}-${dateVal + i}`
-                    )
+                )
             );
         }
         $('#dateline .date')[7].classList.add('today', 'selected');
         let hWrapEl = $('.header__date')[0];
         hWrapEl.scrollLeft = hWrapEl.offsetWidth / 2 - 42;
     }
+    
 }
 
 class ToolBar{
-    constructor(){
+    constructor(app){
+        this.Application = app;
         this.updateDate();
     }
     updateDate(timestring = ""){
@@ -81,8 +90,10 @@ class ToolBar{
 }
 
 class TaskList{
-    constructor(){
+    constructor(app){
+        this.Application = app;
         this.loadTimestamps();
+        this.loadTasklist(Date.now());
     }
     loadTimestamps(){
         $('.calendar-style')[0].innerHTML += `.timestamp{height: ${data.time.height}px}`;
@@ -94,20 +105,26 @@ class TaskList{
         }
         return countStamps;
     }
-    addTask(){
+    loadTasklist(date){
+        let stObjDate = new Date(date);
+        let stDate = `${stObjDate.getMonth()}-${stObjDate.getDate()}-${stObjDate.getFullYear()}`;
+        let arrData = Object.keys(userData.taskData);
+        let len = arrData.length;
+
+        for(let i=0;i<len;i++) {
+            if(arrData[i] == stDate) {
+                let cTasks = userData.taskData[arrData[i]].length;
+                for(let j=0;j<cTasks;j++){
+                    this.addTask(userData.taskData[arrData[i]][j]);
+                }
+                return;
+            }
+        }
+
+    }
+    addTask(objectTask){
         return $('#tasklist')[0].appendChild(
-            tNote({
-                'name'      :   'Задача',
-                'project'   :   'Проект',
-                'type'      :   'Работа',
-                'notes'     :   '',
-                'start'     :   (UTHou*8),
-                'end'       :   (UTHou*10.3)
-            })
+            tNote(objectTask)
         );
     }
 }
-
-
-
-var Application = new TimeKeeper();

@@ -25,9 +25,9 @@
                     <span id="day-addc-data" opc>, 5h free</span>
                 </div>
                 <div class="toolbar__toolset toolset">
-                    <div class="tool"></div>
-                    <div class="tool"></div>
-                    <div class="tool add" bpan-call="addTask" onclick="openBPanel(this)"></div>
+                    <button class="tool"></button>
+                    <button class="tool"></button>
+                    <button class="tool add" bpan-call="addTask" onclick="javascript:openBPanel(this)"></button>
                 </div>
             </div>
         </div>
@@ -43,15 +43,15 @@
 
     <footer>
         <div class="footer__wrap toolset">
-            <div for-page="calendar" class="tool calendar" onclick="choosePage(this)"></div>
-            <div class="tool"></div>
+            <button for-page="calendar" class="tool calendar" onclick="choosePage(this)"></button>
+            <button class="tool"></button>
         </div>
     </footer>
 
     <div bpan-data="addTask" class="bpanel">
         <div class="bpanel__toolset">
             <div class="toolset">
-                <div class="text-btn bpanel__close" onclick="closeBPanel()">Done</div>
+                <button class="text-btn bpanel__close" onclick="closeBPanel()">Done</button>
             </div>
         </div>
         <div class="bpanel__wrap">
