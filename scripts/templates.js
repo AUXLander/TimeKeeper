@@ -23,15 +23,13 @@ var TObject = function(UTValue){
 
 var tTask = function(dataObject){
     dataObject.notes = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
-    let UTDuration = dataObject.end - dataObject.start;
-    let TODuration = TObject(UTDuration);
-    let height = UTDuration*(150/UTHou);
+    let TODuration = TObject(dataObject.dur);
+    let height = dataObject.dur*(150/UTHou);
     let tdiv = document.createElement('div');
 
     tdiv.style.height = height;
     tdiv.style.maxHeight = height;
     tdiv.style.top = (dataObject.start - data.time.start) / UTHou * 150;
-
     tdiv.classList.add('task');
     tdiv.innerHTML = `
     <div class="task__info">

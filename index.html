@@ -52,7 +52,7 @@
 
             </div>
         </div>
-        <div page="notes" id="notelist" class="wrapper notelist flexlist">
+        <div page="notes" id="notelist" class="wrapper notelist flexlist" hidden>
             <div class="noteblock flexlist">
                 <label onclick="toggleNoteblock(this)">
                     <span class="icon"></span>
@@ -102,12 +102,26 @@
     <div bpan-data="addTask" class="bpanel">
         <div class="bpanel__toolset">
             <div class="toolset">
-                <button class="text-btn bpanel__close" onclick="closeBPanel()">Done</button>
+                <button class="text-btn bpanel__close" onclick="closeBPanel();addTask(this)">Done</button>
             </div>
         </div>
         <div class="bpanel__wrap">
             <div class="bpanel__content">
+                <div class="newTask">
+                    <div class="newTask__fields">
+                        <input id="task-name" type="text" placeholder="Название задачи"/>
+                        <input id="task-project" type="text" placeholder="Проект"/>
+                        <input id="task-type" type="text" placeholder="Тип проекта"/>
+                        <textarea id="task-notes" placeholder="Текст задачи"></textarea>
+                        <input id="task-start" type="number" value="2"/>
+                        <p>Время окончания или длительность:</p>
+                        <input id="task-dur" type="number" value="2"/>
+                    </div>
+                </div>
 
+
+                
+                
             </div>
         </div>
     </div>

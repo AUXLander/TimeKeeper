@@ -6,14 +6,14 @@ const UTSec = 60;
 var userData = {
     'userName' : 'Denis',
     'taskData' : {
-        '2-10-2019' : [
+        '1-10-2019' : [
             {
                 'name'      :   'Задача1',
                 'project'   :   'Проект',
                 'type'      :   'Работа',
                 'notes'     :   '',
                 'start'     :   (UTHou*8),
-                'end'       :   (UTHou*10.3)
+                'dur'       :   (UTHou)
             },
             {
                 'name'      :   'Задача2',
@@ -21,17 +21,17 @@ var userData = {
                 'type'      :   'Работа',
                 'notes'     :   '',
                 'start'     :   (UTHou*11),
-                'end'       :   (UTHou*12)
+                'dur'       :   (UTHou)
             }
         ],
-        '2-20-2019' : [
+        '1-20-2019' : [
             {
                 'name'      :   'Задача1',
                 'project'   :   'Проект',
                 'type'      :   'Работа',
                 'notes'     :   '',
-                'start'     :   (UTHou*8),
-                'end'       :   (UTHou*10.3)
+                'start'     :   (UTHou*6),
+                'dur'       :   (UTHou)
             },
             {
                 'name'      :   'Задача2',
@@ -39,7 +39,7 @@ var userData = {
                 'type'      :   'Работа',
                 'notes'     :   '',
                 'start'     :   (UTHou*8),
-                'end'       :   (UTHou*10.3)
+                'dur'       :   (UTHou)
             }
         ]
     },

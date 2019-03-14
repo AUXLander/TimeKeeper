@@ -1,5 +1,6 @@
 document.addEventListener('touchstart',function(){}, true);
 document.addEventListener('gesturestart',function (e){e.preventDefault()});
+
 class TimeKeeper{
     constructor(app){
         this.Application = app;
@@ -23,6 +24,7 @@ class TimeKeeper{
         }
         document.body.setAttribute('current-page', page);
     }
+
 }
 
 class DateControl{
@@ -57,19 +59,20 @@ class DateControl{
 
 class ToolBar{
     constructor(app){
+        this.date;
         this.Application = app;
         this.updateDate();
     }
     updateDate(timestring){
-        let tempDate = new Date(timestring + ' 00:00:00');
-        if(tempDate == "Invalid Date"){
-            tempDate = new Date();
+        this.date = new Date(timestring + ' 00:00:00');
+        if(this.date == "Invalid Date"){
+            this.date = new Date();
             console.log('%cToolBar: Invalide Date Detected!', 'background: #222; color: #bada55');
         }
         this.setDate(
-            WDayName[tempDate.getDay()],
-            tempDate.getDate(),
-            MonthName[tempDate.getMonth()]
+            WDayName[this.date.getDay()],
+            this.date.getDate(),
+            MonthName[this.date.getMonth()]
         );
     }
     setDate(wday, date, month){
@@ -90,7 +93,7 @@ class TaskList{
     constructor(app){
         this.Application = app;
         this.loadTimestamps();
-        this.loadTasklist(Date.now());
+        this.loadByDate(Date.now());
     }
     loadTimestamps(){
         $('.calendar-style')[0].innerHTML += `.timestamp{height: ${data.time.height}px}`;
@@ -102,26 +105,89 @@ class TaskList{
         }
         return countStamps;
     }
-    loadTasklist(date){
+    loadByDate(date){
+        this.clear();
+
         let stObjDate = new Date(date);
         let stDate = `${stObjDate.getMonth()}-${stObjDate.getDate()}-${stObjDate.getFullYear()}`;
         let arrData = Object.keys(userData.taskData);
+        
         let len = arrData.length;
 
         for(let i=0;i<len;i++) {
             if(arrData[i] == stDate) {
                 let cTasks = userData.taskData[arrData[i]].length;
-                for(let j=0;j<cTasks;j++){
-                    this.addTask(userData.taskData[arrData[i]][j]);
+               
+                this.scrollToTask(
+                    this.draw(userData.taskData[arrData[i]][0])
+                );
+                //Пропускаем первый, чтобы заскроллиться к нему
+                for(let j=1;j<cTasks;j++){
+                    this.draw(userData.taskData[arrData[i]][j]);
                 }
                 return;
             }
         }
-
+        
     }
-    addTask(objectTask){
+    draw(objectTask){
+        if(objectTask === undefined){
+            return;
+        }
         return $('#tasklist')[0].appendChild(
             tTask(objectTask)
         );
+    }
+    clear(){
+        let tasks = $('#tasklist .task');
+        
+        for(let i=0;i<tasks.length;i++){
+            tasks[i].remove();
+        }
+    }
+    add(name, project, type, notes, start, duration){
+        if(!name.length && !type.length && !project.length && !notes.length && !duration){
+            return;
+        }
+
+        duration = parseInt(duration);
+        start = parseInt(start);
+
+        if(!name.length){
+            name = "Задача";
+        }
+        if(!duration){
+            duration = UTHou;
+        }
+
+        start = Math.max(data.time.start, start);
+        
+        let tempObject = {
+            'name'      :   name,
+            'project'   :   project,
+            'type'      :   type,
+            'notes'     :   notes,
+            'start'     :   start,
+            'dur'       :   duration
+        }
+
+        let oDate = Application.ToolBar.date;
+        let sDate =  `${oDate.getMonth()}-${oDate.getDate()}-${oDate.getFullYear()}`;
+
+        if(userData.taskData[sDate] === undefined){
+            userData.taskData[sDate] = [];
+        }
+        userData.taskData[sDate].push(tempObject);
+
+        let newTask = this.draw(tempObject);
+
+        this.scrollToTask(newTask);
+    }
+    scrollToTask(taskEl){
+        if(taskEl === undefined){
+            return $('main')[0].scrollTop = 0;
+        }
+
+        return $('main')[0].scrollTop = (parseInt(taskEl.style.top) - 20);
     }
 }

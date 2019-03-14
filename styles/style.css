@@ -372,3 +372,18 @@ footer{
 .noteblock.show > .noteblock__wrap > .noteblock > label{
     height: 90px;
 }
+
+.newTask{
+    position: relative;
+    
+    width: 100%;
+    height: auto;
+}
+.newTask__fields{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+
+
+    width: 100%;
+}
