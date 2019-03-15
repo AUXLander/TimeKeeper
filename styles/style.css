@@ -286,11 +286,9 @@ main{
     right: 0;
     bottom: 0;
     
-    background: #fdfdfd;
+    background: #eff1f3;
 
     transition: .2s ease;
-    
-    padding: 0 30px;
 }
 .bpanel.show{
     top: 0;
@@ -299,6 +297,11 @@ main{
     height: 80px;
     position: relative;
     display: flex;
+    align-items: center;
+    padding: 0 30px;
+    background: #fcfcfc;
+    border-bottom: 1px solid #a7a9aa;
+    margin: 0 0 29px;
 }
 .bpanel__wrap{
     width: 100%;
@@ -385,5 +388,61 @@ footer{
     justify-content: flex-start;
 
 
+    width: 100%;
+}
+
+.block{
+    background: #fefefe;
+    border-top: 1px solid #c7c7cb;
+    border-bottom: 1px solid #c7c7cb;
+    margin: 0 0 38px;
+}
+
+
+.txt_f{
+    width: 100%;
+    padding: 0 0 1px;
+    margin-bottom: 29px;
+}
+
+.txt_f input,
+.txt_f textarea{
+    width: 100%;
+
+    outline: 0;
+
+    background: #fefefe;
+    
+    padding: 27px 50px;
+    
+    line-height: 1;
+    font-size: 24px;
+    color: #69aacc;
+    font-weight: 300;
+    text-align: left;
+
+    border: 0;
+
+    border-top: 1px solid #c7c7cb;
+    border-bottom: 1px solid #c7c7cb;
+
+    margin: 0 0 -1px;
+
+    resize: none;
+}
+.txt_f textarea{
+    height: 200px;
+}
+.txt_f label{
+    display: inline-block;
+    text-transform: uppercase;
+    width: 100%;
+    margin-bottom: 20px;
+    font-size: 20px;
+    color: #6d6d71;
+
+    padding: 0 30px;
+}
+.btn_f{
     width: 100%;
 }

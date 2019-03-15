@@ -67,6 +67,8 @@ class ToolBar{
         this.date = new Date(timestring + ' 00:00:00');
         if(this.date == "Invalid Date"){
             this.date = new Date();
+            let timestring = `${MonthName[this.date.getMonth()-1]} ${this.date.getDate()} ${this.date.getFullYear()} 00:00:00`;
+            this.date = new Date(timestring);// Bug Fix
             console.log('%cToolBar: Invalide Date Detected!', 'background: #222; color: #bada55');
         }
         this.setDate(
@@ -173,6 +175,8 @@ class TaskList{
 
         let oDate = Application.ToolBar.date;
         let sDate =  `${oDate.getMonth()}-${oDate.getDate()}-${oDate.getFullYear()}`;
+
+        console.log(sDate)
 
         if(userData.taskData[sDate] === undefined){
             userData.taskData[sDate] = [];
