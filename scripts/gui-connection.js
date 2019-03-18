@@ -1,5 +1,14 @@
 var Application;
 
+function datelineOn(){
+    $('#dateline')[0].classList.add('active');
+    Application.addClick(datelineOff);
+}
+
+function datelineOff(){
+    $('#dateline')[0].classList.remove('active');
+}
+
 function selectDate(el){
     if(Application === undefined){return false}
 

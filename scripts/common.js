@@ -7,6 +7,23 @@ class TimeKeeper{
         this.DateControl = new DateControl(app);
         this.ToolBar = new ToolBar(app);
         this.TaskList = new TaskList(app);
+        this.Ajax = new Ajax();
+        this.CheckScan = new CheckScan(app);
+
+        //Callbacks for click
+        this.waitClick = [];
+        document.addEventListener('click', function(){
+            while(Application.waitClick.length){
+                (Application.waitClick.pop())();
+            }
+        }, true);
+    }
+    addClick(callback){
+        if (typeof callback !== "function"){
+            return false;
+        }
+        this.waitClick.push(callback);
+        return true;
     }
     openPage(page){
         let pageBlocks;
@@ -193,5 +210,62 @@ class TaskList{
         }
 
         return $('main')[0].scrollTop = (parseInt(taskEl.style.top) - 20);
+    }
+}
+
+const LOGIN_PATH = "/v1/mobile/users/login";
+const RESTORE_PATH = "v1/mobile/users/restore";
+const SIGN_UP = "/v1/mobile/users/signup";
+
+class Ajax{
+    constructor(){
+        this.requests = [];
+    }
+    getXmlHttp(){
+        var xmlhttp;
+        try {
+            xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+        }
+        catch (e) {
+            try {
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            catch (E) {
+                xmlhttp = false;
+            }
+        }
+        if (!xmlhttp && typeof XMLHttpRequest!='undefined') {
+            xmlhttp = new XMLHttpRequest();
+        }
+        return xmlhttp;
+    }
+    vote() {
+        var req = this.getXmlHttp()  
+        var statusElem = document.getElementById('day-addc-data') 
+        
+        req.onreadystatechange = function() {  
+            if (req.readyState == 4) { 
+                // если запрос закончил выполняться
+                statusElem.innerHTML = req.statusText // показать статус (Not Found, ОК..)
+                if(req.status == 200) { 
+                    // если статус 200 (ОК)
+                    alert("Ответ сервера: "+req.responseText);
+                }
+            }
+        }
+
+        // (3) задать адрес подключения
+        req.open('GET', '/req.php', false); 
+        req.send(null);  // отослать запрос
+        statusElem.innerHTML = 'Ожидаю ответа сервера...' 
+    }
+}
+
+class CheckScan{
+    constructor(app){
+        this.Application = app;
+    }
+    signUp(email, name, phone){
+
     }
 }

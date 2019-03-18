@@ -141,11 +141,11 @@ main{
 }
 
 .toolbar{
-    padding: 24px 0;
-    height: 120px;
+    height: 112px;
+    padding: 20px 0;
     font-size: 20px;
+    font-weight: 500;
     user-select: none;
-    font-weight: 500
 }
 .toobar__wrap{
     height: 100%;
@@ -401,7 +401,7 @@ footer{
 
 .txt_f{
     width: 100%;
-    padding: 0 0 1px;
+    padding: 0 0 2px;
     margin-bottom: 29px;
 }
 
@@ -426,7 +426,7 @@ footer{
     border-top: 1px solid #c7c7cb;
     border-bottom: 1px solid #c7c7cb;
 
-    margin: 0 0 -1px;
+    margin: 0 0 -2px;
 
     resize: none;
 }
@@ -445,4 +445,27 @@ footer{
 }
 .btn_f{
     width: 100%;
+}
+.dateline .date{
+    height: 50px;
+
+    transition: height .2s ease;
+}
+.dateline.active .date{
+    height: 85px;
+}
+.dateline .date .date__wday{
+    display: inline-block;
+
+    max-height: 0;
+    opacity: 0;
+
+    overflow: hidden;
+
+    transition: max-height .2s ease, opacity .2s ease;
+}
+.dateline.active .date .date__wday{
+    
+    opacity: 1;
+    max-height: 23px;
 }
