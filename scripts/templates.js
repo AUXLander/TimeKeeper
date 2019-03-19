@@ -9,9 +9,9 @@ var tStamp = function(tObject){
         <span>
             ${tObject.h}
         </span>
-            <sup>
-                ${tObject.m < 10 ?'0'+tObject.m:tObject.m}
-            </sup>`;
+        <sup>
+            ${tObject.m < 10 ?'0'+tObject.m:tObject.m}
+        </sup>`;
     return tdiv;
 }
 

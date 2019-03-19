@@ -9,7 +9,6 @@ class TimeKeeper{
         this.TaskList = new TaskList(app);
         this.Ajax = new Ajax();
         this.CheckScan = new CheckScan(app);
-
         //Callbacks for click
         this.waitClick = [];
         document.addEventListener('click', function(){
@@ -27,7 +26,6 @@ class TimeKeeper{
     }
     openPage(page){
         let pageBlocks;
-
         if(document.body.getAttribute('current-page') == page){
             return;
         }
@@ -225,17 +223,20 @@ class Ajax{
         var xmlhttp;
         try {
             xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+            console.log('Msxml2.XMLHTTP');
         }
         catch (e) {
             try {
                 xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+                console.log('Microsoft.XMLHTTP');
             }
             catch (E) {
                 xmlhttp = false;
             }
         }
-        if (!xmlhttp && typeof XMLHttpRequest!='undefined') {
+        if (!xmlhttp && typeof XMLHttpRequest !== undefined) {
             xmlhttp = new XMLHttpRequest();
+            console.log('XMLHttpRequest');
         }
         return xmlhttp;
     }
@@ -246,16 +247,17 @@ class Ajax{
         req.onreadystatechange = function() {  
             if (req.readyState == 4) { 
                 // если запрос закончил выполняться
-                statusElem.innerHTML = req.statusText // показать статус (Not Found, ОК..)
+                //statusElem.innerHTML = req.statusText // показать статус (Not Found, ОК..)
                 if(req.status == 200) { 
                     // если статус 200 (ОК)
-                    alert("Ответ сервера: "+req.responseText);
+                    //alert("Ответ сервера: " + req.responseText);
+                    console.log(req.responseText);
                 }
             }
         }
 
         // (3) задать адрес подключения
-        req.open('GET', '/req.php', false); 
+        req.open('GET', '/req.php', true); 
         req.send(null);  // отослать запрос
         statusElem.innerHTML = 'Ожидаю ответа сервера...' 
     }
