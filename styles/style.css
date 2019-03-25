@@ -276,43 +276,6 @@ main{
     overflow: hidden;
 }
 
-.bpanel{
-    overflow: hidden;
-
-    position: fixed;
-
-    top: 100%;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    
-    background: #eff1f3;
-
-    transition: .2s ease;
-}
-.bpanel.show{
-    top: 0;
-}
-.bpanel__toolset{
-    height: 80px;
-    position: relative;
-    display: flex;
-    align-items: center;
-    padding: 0 30px;
-    background: #fcfcfc;
-    border-bottom: 1px solid #a7a9aa;
-    margin: 0 0 29px;
-}
-.bpanel__wrap{
-    width: 100%;
-    height: calc(100vh - 120px);
-    
-    overflow-x: hidden;
-    overflow-y: scroll;
-}
-.bpanel__content{
-    width: 100%;
-}
 
 .text-btn{
     cursor: pointer;
@@ -468,4 +431,15 @@ footer{
     
     opacity: 1;
     max-height: 23px;
+}
+
+.note-item{
+    width: 100%;
+    min-height: 80px;
+    border-bottom: 1px solid #000;
+
+}
+.note-items{
+    display: flex;
+    flex-direction: column;
 }

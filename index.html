@@ -4,6 +4,7 @@
     <link rel="stylesheet" href="styles/normilize.css"> 
     <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" href="styles/toolset.css">
+    <link rel="stylesheet" href="styles/layer.css">
 
     <meta name="google" content="notranslate">
     <meta name="viewport" content="width=device-width, minimum-scale=0.6, initial-scale=0.6, maximum-scale=0.6, user-scalable=no">
@@ -29,7 +30,7 @@
                     <div class="toolbar__toolset toolset">
                         <button class="tool"></button>
                         <button class="tool"></button>
-                        <button class="tool add" bpan-call="addTask" onclick="openBPanel"></button>
+                        <button class="tool add" layer-call="addTask" onclick="openLayer(this)"></button>
                     </div>
                 </div>
             </div>
@@ -73,7 +74,7 @@
                             <span class="icon"></span>
                             <span>Куплено</span>
                         </label>
-                        <div class="noteblock__wrap flexlist">
+                        <div class="noteblock__wrap flexlist" layer-call="noteList" onclick="openLayer(this)">
                             <div class="noteblock flexlist">
                                 <label onclick="toggleNoteblock(this)">
                                     <span class="icon"></span>
@@ -99,15 +100,15 @@
         </div>
     </footer>
 
-    <div bpan-data="addTask" class="bpanel">
-        <div class="bpanel__toolset">
-                <button class="text-btn bpanel__close" onclick="closeBPanel()">Cancel</button>
+    <div layer-data="addTask" class="layer bottom">
+        <div class="layer__toolset">
+            <button class="text-btn layer__close" onclick="closeLayer()">Cancel</button>
             <div class="toolset">
-                <button class="text-btn bpanel__close" onclick="closeBPanel();addTask(this)">Done</button>
+                <button class="text-btn layer__close" onclick="closeLayer();addTask(this)">Done</button>
             </div>
         </div>
-        <div class="bpanel__wrap">
-            <div class="bpanel__content">
+        <div class="layer__wrap">
+            <div class="layer__content">
                 <!--<div class="block"></div>-->
                 <div class="txt_f">
                     <label>Add new</label>
@@ -125,16 +126,40 @@
                 <div class="btn_f">
 
                 </div>
-
-                
-
-
-                
-                
             </div>
         </div>
     </div>
 
+    <div layer-data="noteList" class="layer right">
+        <div class="layer__toolset">
+            <button class="text-btn layer__close" onclick="closeLayer()">Cancel</button>
+            <div class="layer__title"><span>Куплено</span></div>
+        </div>
+        <div class="layer__wrap">
+            <div class="layer__content">
+                <div class="note-items">
+                    <div class="note-item">
+                        <div class="note-item__wrap">
+                            <p>
+                                <strong></strong>
+                                <span></span>
+                                <time></time>
+                            </p>
+                            <span></span>
+                        </div>
+                    </div>
+
+
+
+
+
+                    
+                </div> 
+                
+
+            </div>
+        </div>
+    </div>
 
     <style class="calendar-style"></style>
 

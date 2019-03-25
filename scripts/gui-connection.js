@@ -1,5 +1,6 @@
 var Application;
 
+
 function datelineOn(){
     $('#dateline')[0].classList.add('active');
     Application.addClick(datelineOff);
@@ -14,7 +15,7 @@ function selectDate(el){
 
     $('.date.selected')[0].classList.remove('selected');
     Application.ToolBar.updateDate(el.getAttribute('data-date'));
-    Application.TaskList.loadByDate(el.getAttribute('data-date'));
+    Application.TaskList.getByDate(el.getAttribute('data-date'));
     el.classList.add('selected');
 }
 
@@ -31,14 +32,14 @@ function addTask(el){
     );
 }
 
-function closeBPanel(){
+function closeLayer(){
     if(Application === undefined){return false}
-    $('.bpanel.show')[0].classList.remove('show');
+    $('.layer.show')[0].classList.remove('show');
 }
 
-function openBPanel(el){
+function openLayer(el){
     if(Application === undefined){return false}
-    $(`[bpan-data="${el.getAttribute('bpan-call')}"]`)[0].classList.add('show');
+    $(`[layer-data="${el.getAttribute('layer-call')}"]`)[0].classList.add('show');
 }
 
 function choosePage(toolbutton){
@@ -50,7 +51,8 @@ function toggleNoteblock(el){
     el.parentElement.classList.toggle('show');
 }
 
-document.addEventListener("DOMContentLoaded", function(event) {
+document.addEventListener("DOMContentLoaded", function(){
     Application = new TimeKeeper(Application);
+    
 
 });

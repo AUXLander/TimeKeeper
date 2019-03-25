@@ -1,0 +1,58 @@
+.layer{
+    overflow: hidden;
+    position: fixed;
+    background: #eff1f3;
+    transition: .2s ease;
+}
+.layer.bottom{
+    top: 100%;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+.layer.right{
+    top: 0;
+    left: 100%;
+    right: 0;
+    bottom: 0;
+}
+.layer.bottom.show{
+    top: 0;
+}
+.layer.right.show{
+    left: 0;
+}
+.layer__toolset{
+    height: 80px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 0 30px;
+    background: #fcfcfc;
+    border-bottom: 1px solid #a7a9aa;
+    margin: 0 0 29px;
+}
+.layer__wrap{
+    width: 100vw;
+    height: calc(100vh - 120px);
+    
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+.layer__content{
+    width: 100%;
+}
+.layer__title{
+    pointer-events: none;
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

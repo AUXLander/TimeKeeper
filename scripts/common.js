@@ -8,7 +8,7 @@ class TimeKeeper{
         this.ToolBar = new ToolBar(app);
         this.TaskList = new TaskList(app);
         this.Ajax = new Ajax();
-        this.CheckScan = new CheckScan(app);
+        //this.CheckScan = new CheckScan(app);
         //Callbacks for click
         this.waitClick = [];
         document.addEventListener('click', function(){
@@ -122,6 +122,47 @@ class TaskList{
         }
         return countStamps;
     }
+    getByDate(date){
+        let req = Application.Ajax.getXmlHttp();
+        req.onreadystatechange = function() {  
+            if (this.readyState == 4) { 
+                if(this.status == 200) { 
+                    //console.log(this.responseText);
+                    let json = -1;
+                    try{
+                        json = JSON.parse(this.responseText);
+                        
+                    } catch(e){}
+
+                    console.log(userData.taskData);
+                    
+                    let date_keys = Object.keys(json);
+
+                    while(date_keys.length){
+
+                        let date_key = date_keys.pop();
+                        let keys = Object.keys(json[date_key]);
+
+                        while(keys.length){
+                            let key = keys.pop();
+
+                            while(json[date_key][key].length){
+                                if(userData.taskData[key] === undefined){
+                                    userData.taskData.push(new Object({key:[]}));
+                                }
+                                userData.taskData[key].push(json[date_key][key].pop());
+                            }
+                        }
+                    }
+                    console.log(userData.taskData);
+                }
+                this.abort();
+            }
+            
+        }
+        req.open('GET', '/php/getTask.php', true); 
+        req.send(null);
+    }
     loadByDate(date){
         this.clear();
 
@@ -191,8 +232,6 @@ class TaskList{
         let oDate = Application.ToolBar.date;
         let sDate =  `${oDate.getMonth()}-${oDate.getDate()}-${oDate.getFullYear()}`;
 
-        console.log(sDate)
-
         if(userData.taskData[sDate] === undefined){
             userData.taskData[sDate] = [];
         }
@@ -211,9 +250,6 @@ class TaskList{
     }
 }
 
-const LOGIN_PATH = "/v1/mobile/users/login";
-const RESTORE_PATH = "v1/mobile/users/restore";
-const SIGN_UP = "/v1/mobile/users/signup";
 
 class Ajax{
     constructor(){
@@ -223,12 +259,10 @@ class Ajax{
         var xmlhttp;
         try {
             xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
-            console.log('Msxml2.XMLHTTP');
         }
         catch (e) {
             try {
                 xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-                console.log('Microsoft.XMLHTTP');
             }
             catch (E) {
                 xmlhttp = false;
@@ -240,6 +274,7 @@ class Ajax{
         }
         return xmlhttp;
     }
+    
     vote() {
         var req = this.getXmlHttp()  
         var statusElem = document.getElementById('day-addc-data') 
@@ -259,15 +294,5 @@ class Ajax{
         // (3) задать адрес подключения
         req.open('GET', '/req.php', true); 
         req.send(null);  // отослать запрос
-        statusElem.innerHTML = 'Ожидаю ответа сервера...' 
-    }
-}
-
-class CheckScan{
-    constructor(app){
-        this.Application = app;
-    }
-    signUp(email, name, phone){
-
     }
 }
