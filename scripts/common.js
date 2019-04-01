@@ -1,6 +1,13 @@
 document.addEventListener('touchstart',function(){}, true);
 document.addEventListener('gesturestart',function (e){e.preventDefault()});
 
+function tcor(key){
+	if(key.length == 1 || key < 10){
+		return `0${key}`;
+	}
+	return key;
+}
+
 class TimeKeeper{
     constructor(app){
         this.Application = app;
@@ -10,6 +17,9 @@ class TimeKeeper{
         this.Ajax = new Ajax();
         //this.CheckScan = new CheckScan(app);
         //Callbacks for click
+
+        this.afterAuth()
+
         this.waitClick = [];
         document.addEventListener('click', function(){
             while(Application.waitClick.length){
@@ -17,6 +27,13 @@ class TimeKeeper{
             }
         }, true);
     }
+
+    afterAuth(){
+        //Обновляем данные
+        this.updateProjects();
+        this.updateTypes();
+    }
+
     addClick(callback){
         if (typeof callback !== "function"){
             return false;
@@ -39,13 +56,79 @@ class TimeKeeper{
         }
         document.body.setAttribute('current-page', page);
     }
+    updateProjects(){
+        var updProjects = new XMLHttpRequest();
+        updProjects.onreadystatechange = function(){
+            if (this.readyState == 4) { 
+                if(this.status == 200) { 
+                    let json;
+                    try{
+                        json = JSON.parse(this.responseText);
+                    }
+                    catch(e){
+                        console.log(e);
+                        this.abort();
+                        return;
+                    }
 
+                    if(json.length < 1 || json[0].projectID === undefined){
+                        this.abort();
+                        return;
+                    }
+
+                    projectData.length = 0;
+                    while(json.length){
+                        projectData.push(json.pop());
+                    }
+
+                    this.abort();
+                }
+            }
+        }
+        updProjects.open('GET', '/php/project/getProjects.php', true); 
+        updProjects.send(null);
+    }
+    updateTypes(){
+        var updTypes = new XMLHttpRequest();
+        updTypes.onreadystatechange = function(){
+            if (this.readyState == 4) { 
+                if(this.status == 200) {
+                    
+                    let json;
+                    try{
+                        json = JSON.parse(this.responseText);
+                    }
+                    catch(e){
+                        console.log(e);
+                        this.abort();
+                        return;
+                    }
+
+                    if(json.length < 1 || json[0].typeID === undefined){
+                        this.abort();
+                        return;
+                    }
+
+                    typeData.length = 0;
+                    while(json.length){
+                        typeData.push(json.pop());
+                    }
+                    
+                    this.abort();
+                }
+            }
+        }
+        updTypes.open('GET', '/php/type/getTypes.php', true); 
+        updTypes.send(null);
+    }
 }
 
 class DateControl{
     constructor(app){
         this.Application = app;
         this.dateLine = $('#dateline')[0];
+        this.selectedDate;
+        
         this.loadDate();
     }
     addDate(timestamp){
@@ -54,22 +137,32 @@ class DateControl{
     }
     loadDate(){
         let date = new Date(Date.now() - UTWee*1000);
-        let dateVal = date.getDate();
         let dayName = date.getDay();
         for(let i=0;i<14;i++) {
             this.dateLine.appendChild(
                 tDate(
                     WDayName[(dayName + i) % 7],
-                    dateVal + i,
-                    `${date.getFullYear()}/${date.getMonth()}/${dateVal + i}`
+                    date.getDate(),
+                    `${date.getFullYear()}-${tcor(date.getMonth() + 1)}-${tcor(date.getDate())}`
                 )
             );
+            date = new Date(date.getTime() + UTDay*1000);
         }
-        $('#dateline .date')[7].classList.add('today', 'selected');
+
+        let today = $('#dateline .date')[7];
+        today.classList.add('today', 'selected');
+        this.selectedDate = today.getAttribute('data-date');
+
         let hWrapEl = $('.header__date')[0];
         hWrapEl.scrollLeft = hWrapEl.offsetWidth / 2 - 42;
     }
-    
+    timeToFloat(s_time){
+        if(typeof(s_time) !== "string" || !s_time.length){
+            return 0;
+        }
+        s_time = s_time.split(':');
+        return parseInt(s_time[0])%24 + parseInt(s_time[1])/60;
+    }
 }
 
 class ToolBar{
@@ -79,10 +172,10 @@ class ToolBar{
         this.updateDate();
     }
     updateDate(timestring){
-        this.date = new Date(timestring + ' 00:00:00');
+        this.date = new Date(timestring + 'T00:00:00');
         if(this.date == "Invalid Date"){
-            this.date = new Date();
-            let timestring = `${MonthName[this.date.getMonth()-1]} ${this.date.getDate()} ${this.date.getFullYear()} 00:00:00`;
+			this.date = new Date();
+            let timestring = `${this.date.getFullYear()}-${tcor(this.date.getMonth())}-${this.date.getDate()}T00:00:00`;
             this.date = new Date(timestring);// Bug Fix
             console.log('%cToolBar: Invalide Date Detected!', 'background: #222; color: #bada55');
         }
@@ -110,7 +203,12 @@ class TaskList{
     constructor(app){
         this.Application = app;
         this.loadTimestamps();
-        this.loadByDate(Date.now());
+
+        this.getByDate(Date.now());
+		//this.loadByDate(Date.now());
+
+		//To save in local storage
+		this.localTaskID = 0;
     }
     loadTimestamps(){
         $('.calendar-style')[0].innerHTML += `.timestamp{height: ${data.time.height}px}`;
@@ -123,70 +221,83 @@ class TaskList{
         return countStamps;
     }
     getByDate(date){
-        let req = Application.Ajax.getXmlHttp();
+        
+        this.clear();
+
+        let stObjDate = new Date(date);
+        let stDate = `${stObjDate.getFullYear()}-${tcor(stObjDate.getMonth()+1)}-${stObjDate.getDate()}`;
+
+        var req = new XMLHttpRequest();
         req.onreadystatechange = function() {  
-            if (this.readyState == 4) { 
+            
+            if (this.readyState == 4) {
                 if(this.status == 200) { 
-                    //console.log(this.responseText);
-                    let json = -1;
+                    let json;
                     try{
                         json = JSON.parse(this.responseText);
-                        
-                    } catch(e){}
-
-                    console.log(userData.taskData);
+                    }
+                    catch(e){
+                        if(this.responseText != "NULL"){
+                            console.log(e);
+                        }
+                        this.abort();
+                        return;
+                    }
                     
-                    let date_keys = Object.keys(json);
-
-                    while(date_keys.length){
-
-                        let date_key = date_keys.pop();
-                        let keys = Object.keys(json[date_key]);
-
-                        while(keys.length){
-                            let key = keys.pop();
-
-                            while(json[date_key][key].length){
-                                if(userData.taskData[key] === undefined){
-                                    userData.taskData.push(new Object({key:[]}));
-                                }
-                                userData.taskData[key].push(json[date_key][key].pop());
+					let jNode;
+					while(json.length){
+                        jNode = json.pop();
+                        let i = 0;
+						for(;i<taskData.length;i++){
+                            if(taskData[i].taskID == jNode.taskID){
+                                taskData[i] = jNode;
+                                break;
                             }
                         }
+                        if(taskData.length == i){
+                            taskData.push(jNode);
+                            
+                            Application.TaskList.scrollToTask(
+                                Application.TaskList.draw(jNode)
+                            );
+                        }
                     }
-                    console.log(userData.taskData);
+
+                    Application.TaskList.loadByDate(
+                        Application.DateControl.selectedDate
+                    );
+                    
+                    this.abort();
                 }
-                this.abort();
             }
-            
         }
-        req.open('GET', '/php/getTask.php', true); 
+        console.log(stDate);
+        req.open('GET', '/php/task/getTask.php?date='+stDate, true);
+        req.setRequestHeader('Content-type', 'application/json');
         req.send(null);
     }
     loadByDate(date){
         this.clear();
 
         let stObjDate = new Date(date);
-        let stDate = `${stObjDate.getMonth()}-${stObjDate.getDate()}-${stObjDate.getFullYear()}`;
-        let arrData = Object.keys(userData.taskData);
+        let stDate = `${stObjDate.getFullYear()}-${tcor(stObjDate.getMonth()+1)}-${tcor(stObjDate.getDate())}`;
         
-        let len = arrData.length;
+        let len = taskData.length;
+        let min_time = UTHou * data.time.end;
+        let min_obj;
 
-        for(let i=0;i<len;i++) {
-            if(arrData[i] == stDate) {
-                let cTasks = userData.taskData[arrData[i]].length;
-               
-                this.scrollToTask(
-                    this.draw(userData.taskData[arrData[i]][0])
-                );
-                //Пропускаем первый, чтобы заскроллиться к нему
-                for(let j=1;j<cTasks;j++){
-                    this.draw(userData.taskData[arrData[i]][j]);
+        for(let i=0;i<len;i++){
+            if(taskData[i].date == stDate){
+                if(taskData[i].time_s < min_time){
+                    min_time = taskData[i].time_s;
+                    min_obj = this.draw(taskData[i]);
                 }
-                return;
+                else {
+                    this.draw(taskData[i]);
+                }
             }
         }
-        
+        this.scrollToTask(min_obj);
     }
     draw(objectTask){
         if(objectTask === undefined){
@@ -203,43 +314,75 @@ class TaskList{
             tasks[i].remove();
         }
     }
-    add(name, project, type, notes, start, duration){
-        if(!name.length && !type.length && !project.length && !notes.length && !duration){
-            return;
+    add(name, projectID, typeID, descript, noteID, time_s, time_d, time_r = 0){
+        var addTaskReq = Application.Ajax.getXmlHttp();
+
+        addTaskReq.onreadystatechange = function(){
+            if (this.readyState == 4) { 
+                if(this.status == 200) { 
+                    let json;
+                    try{
+                        json = JSON.parse(this.responseText);
+                    }
+                    catch(e){
+                        console.log(e);
+                        this.abort();
+                        return;
+                    }
+
+                    if(json.length < 1){
+                        this.abort();
+                        return;
+                    }
+                    if(json[0].projectID === undefined){
+                        this.abort();
+                        return;
+                    }
+
+
+                    let tempTask = json.pop(); 
+                    taskData.push(tempTask);
+
+                    Application.TaskList.scrollToTask(
+                        Application.TaskList.draw(tempTask)
+                    );
+                    
+                    this.abort();
+                }
+            }
         }
 
-        duration = parseInt(duration);
-        start = parseInt(start);
+        time_s = Application.DateControl.timeToFloat(time_s) * UTHou;
+        time_d = Application.DateControl.timeToFloat(time_d) * UTHou;
 
-        if(!name.length){
-            name = "Задача";
-        }
-        if(!duration){
-            duration = UTHou;
-        }
+        let date;
 
-        start = Math.max(data.time.start, start);
-        
-        let tempObject = {
-            'name'      :   name,
-            'project'   :   project,
-            'type'      :   type,
-            'notes'     :   notes,
-            'start'     :   start,
-            'dur'       :   duration
-        }
+        projectID = encodeURIComponent(projectID);
+        typeID    = encodeURIComponent(typeID);
+        noteID    = encodeURIComponent(noteID);
+        date      = encodeURIComponent(Application.DateControl.selectedDate);
+        name      = encodeURIComponent(name);
+        descript  = encodeURIComponent(descript);
+        time_s    = encodeURIComponent(time_s);
+        time_d    = encodeURIComponent(time_d);
+        time_r    = encodeURIComponent(time_r);
 
-        let oDate = Application.ToolBar.date;
-        let sDate =  `${oDate.getMonth()}-${oDate.getDate()}-${oDate.getFullYear()}`;
+        let body = `
+            localTaskID=${this.localTaskID++}
+            &projectID=${projectID}
+            &typeID=${typeID}
+            &noteID=${noteID}
+            &date=${date}
+            &name=${name}
+            &desc=${descript}
+            &time_s=${time_s}
+            &time_d=${time_d}
+            &time_r=${time_r}`;
 
-        if(userData.taskData[sDate] === undefined){
-            userData.taskData[sDate] = [];
-        }
-        userData.taskData[sDate].push(tempObject);
+        addTaskReq.open("POST", '/php/task/addTask.php', true);
+        addTaskReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
-        let newTask = this.draw(tempObject);
-
-        this.scrollToTask(newTask);
+        addTaskReq.send(body);
     }
     scrollToTask(taskEl){
         if(taskEl === undefined){
@@ -256,6 +399,7 @@ class Ajax{
         this.requests = [];
     }
     getXmlHttp(){
+        /*
         var xmlhttp;
         try {
             xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
@@ -269,30 +413,11 @@ class Ajax{
             }
         }
         if (!xmlhttp && typeof XMLHttpRequest !== undefined) {
-            xmlhttp = new XMLHttpRequest();
-            console.log('XMLHttpRequest');
-        }
-        return xmlhttp;
-    }
-    
-    vote() {
-        var req = this.getXmlHttp()  
-        var statusElem = document.getElementById('day-addc-data') 
-        
-        req.onreadystatechange = function() {  
-            if (req.readyState == 4) { 
-                // если запрос закончил выполняться
-                //statusElem.innerHTML = req.statusText // показать статус (Not Found, ОК..)
-                if(req.status == 200) { 
-                    // если статус 200 (ОК)
-                    //alert("Ответ сервера: " + req.responseText);
-                    console.log(req.responseText);
-                }
-            }
-        }
-
-        // (3) задать адрес подключения
-        req.open('GET', '/req.php', true); 
-        req.send(null);  // отослать запрос
+            */
+            //xmlhttp = new XMLHttpRequest();
+        //}
+        //return xmlhttp;
+        return new XMLHttpRequest();
     }
 }
+    

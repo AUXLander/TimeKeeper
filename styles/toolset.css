@@ -34,3 +34,7 @@
 .tool.list{
     background: url(../img/icons/list.svg) center no-repeat;
 }
+/* === ===*/
+.tool.settings{
+    background: url(../img/icons/settings.svg) center no-repeat;
+}

@@ -25,6 +25,21 @@ button{
 [hidden]{
     display: none !important;
 }
+::-ms-clear {
+  display: none;
+}
+::-webkit-clear-decoration,
+::-webkit-clear-cancel-button,
+::-webkit-clear-results-button,
+::-webkit-clear-results-decoration { 
+  display: none; 
+}
+::-webkit-search-cancel-button,
+::-webkit-search-results-button { 
+    -webkit-appearance: none; 
+}
+
+
 @font-face{
     font-family: LuciaGrade;
     src: url("../fonts/LG.ttf");
@@ -45,6 +60,8 @@ body{
     display: flex;
     flex-direction: column;
     letter-spacing: -0.03em;
+
+    padding-top: 30px;
 }
 header{
     overflow: hidden;
@@ -70,7 +87,7 @@ main{
 .header__date{
     position: relative;
     user-select: none;
-    padding: 8px 0;
+    padding: 8px 0 0;
     max-width: 100%;
     overflow-x: scroll;
     overflow-y: hidden;
@@ -141,8 +158,8 @@ main{
 }
 
 .toolbar{
-    height: 112px;
-    padding: 20px 0;
+    height: 94px;
+    padding: 12px 0;
     font-size: 20px;
     font-weight: 500;
     user-select: none;
@@ -217,18 +234,19 @@ main{
 .tasklist{
     flex: 1;
     overflow: hidden;
+    position: relative;
 }
 .task{
     position: absolute;
-    left: initial !important;
-    right: initial !important;
+    left: 30px;
+    right: 30px;
 
     border-radius: 20px;
     
     background: rgba(91,158,116,1);
 
     min-height: 300px;
-    margin: 0 30px;
+    /*margin: 0 30px;*/
     
     color: white;
     font-size: 18px;
@@ -289,7 +307,7 @@ footer{
 }
 .footer__wrap{
     margin: 10px 0;
-    justify-content: flex-start;
+    justify-content: space-between;
 }
 .page-title{
     font-size: 63px;
@@ -442,4 +460,17 @@ footer{
 .note-items{
     display: flex;
     flex-direction: column;
+}
+.note-item__wrap{
+    padding:20px 30px;
+    background:#fcfcfc;
+    min-height: 100%;
+    height: initial;
+}
+.note-area{
+    min-height: inherit;
+    height: initial;
+    outline: 0;
+
+    font-size: 30px;
 }

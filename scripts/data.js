@@ -3,6 +3,31 @@ const UTDay = 86400;
 const UTHou = 3600;
 const UTMin = 60;
 const UTSec = 60;
+
+var taskData =
+[
+    
+]
+var noteData = [
+    {
+        
+    }
+]
+var projectData = [
+    {
+        projectID: 0,
+        name: '',
+        description: ''
+    }
+]
+var typeData = [
+    {
+        typeID: 0,
+        userID: 0,
+        type_name: ''
+    }
+]
+
 var userData = {
     'userName' : 'Denis',
     'taskData' : {

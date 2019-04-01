@@ -66,7 +66,15 @@
                             <span>Купить</span>
                         </label>
                         <div class="noteblock__wrap flexlist">
-                           
+                            <div class="noteblock flexlist" layer-call="note" onclick="openLayer(this)">
+                                <label onclick="toggleNoteblock(this)">
+                                    <span class="icon"></span>
+                                    <span>Заметка(редактируема)</span>
+                                </label>
+                                <div class="noteblock__wrap flexlist">
+                                    
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="noteblock flexlist">
@@ -78,7 +86,7 @@
                             <div class="noteblock flexlist">
                                 <label onclick="toggleNoteblock(this)">
                                     <span class="icon"></span>
-                                    <span>Список продуктов в холодильнике</span>
+                                    <span>Список(нередактируемый)</span>
                                 </label>
                                 <div class="noteblock__wrap flexlist">
                                     
@@ -97,6 +105,7 @@
         <div class="footer__wrap wrapper toolset">
             <button for-page="calendar" class="tool calendar" onclick="choosePage(this)"></button>
             <button for-page="notes" class="tool list" onclick="choosePage(this)"></button>
+            <button for-page="settings" class="tool settings" onclick="choosePage(this)"></button>
         </div>
     </footer>
 
@@ -115,12 +124,12 @@
                     <input id="task-name" type="text" placeholder="Name"/>
                     <input id="task-project" type="text" placeholder="Project"/>
                     <input id="task-type" type="text" placeholder="Project type"/>
-                    <textarea id="task-notes" placeholder="Notes"></textarea>
+                    <textarea id="task-description" placeholder="Notes"></textarea>
                 </div>
                 <div class="txt_f">
                     <label>Time settings</label>
-                    <input id="task-start" type="number" value="2"/>
-                    <input id="task-dur" type="number" value="2"/>
+                    <input id="task-start" type="time" name="time" min="05:00" max="23:00" value="05:00" required/>
+                    <input id="task-dur" type="time" name="time" min="00:00" max="18:00" value="01:00" required/>
                 </div>
 
                 <div class="btn_f">
@@ -137,15 +146,32 @@
         </div>
         <div class="layer__wrap">
             <div class="layer__content">
-                <div class="note-items">
-                    <div class="note-item">
+                <div class="note-items" style="min-height: 100%">
+                    <div class="note-item" style="flex: 1">
                         <div class="note-item__wrap">
-                            <p>
-                                <strong></strong>
-                                <span></span>
-                                <time></time>
-                            </p>
-                            <span></span>
+                            <table style="table-layout: fixed; width: 100%;text-align: left; border: 1px solid #ccc">
+                                <colgroup>
+                                    <col style="width: 75px">
+                                    <col style="width: 71px">
+                                    <col style="width: 157px">
+                                    <col style="width: 108px">
+                                    <col style="width: 150px">
+                                </colgroup>
+                                <tr>
+                                    <th>название</th>
+                                    <th>тип</th>
+                                    <th>дата покупки</th>
+                                    <th>срок хранения</th>
+                                    <th>стоимость</th>
+                                </tr>
+                                <tr>
+                                    <td>молоко</td>
+                                    <td>молочные продукты</td>
+                                    <td>27.03.2019</td>
+                                    <td>7 дней</td>
+                                    <td>45р</td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
 
@@ -160,6 +186,38 @@
             </div>
         </div>
     </div>
+
+    <div layer-data="note" class="layer right">
+        <div class="layer__toolset">
+            <button class="text-btn layer__close" onclick="closeLayer()">Cancel</button>
+            <div class="layer__title"><span>Куплено</span></div>
+        </div>
+        <div class="layer__wrap">
+            <div class="layer__content">
+                <div class="note-items" style="min-height: 100%">
+                    <div class="note-item" style="flex: 1">
+                        <div class="note-item__wrap">
+                            <div class="note-area" contenteditable="true">
+                                какая-то заметочка че хочу то пишу
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+                    
+                </div> 
+                
+
+            </div>
+        </div>
+    </div>
+
+
+
+
 
     <style class="calendar-style"></style>
 

@@ -22,23 +22,23 @@ var TObject = function(UTValue){
 }
 
 var tTask = function(dataObject){
-    let TODuration = TObject(dataObject.dur);
-    let height = dataObject.dur*(150/UTHou);
+    let TODuration = TObject(dataObject.time_d);
+    let height = dataObject.time_d*(150/UTHou);
     let tdiv = document.createElement('div');
 
     tdiv.style.height = height;
     tdiv.style.maxHeight = height;
-    tdiv.style.top = (dataObject.start - data.time.start) / UTHou * 150;
+    tdiv.style.top = (dataObject.time_s - data.time.start) / UTHou * 150;
     tdiv.classList.add('task');
     tdiv.innerHTML = `
     <div class="task__info">
         <div class="task__wrap">
             <div class="task__name">
-                ${dataObject.name} <span>${dataObject.project}, ${dataObject.type}</span>
+                ${dataObject.name} <span>${dataObject.projectID}, ${dataObject.typeID}</span>
             </div>
             <div class="task__notes">
                 <p>
-                    ${dataObject.notes}
+                    ${dataObject.desc}
                 </p>
             </div>
         </div>
