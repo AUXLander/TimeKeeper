@@ -1,5 +1,5 @@
 var Application;
-
+AOS.init();
 
 function datelineOn(){
     $('#dateline')[0].classList.add('active');

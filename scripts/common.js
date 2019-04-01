@@ -33,7 +33,6 @@ class TimeKeeper{
         this.updateProjects();
         this.updateTypes();
     }
-
     addClick(callback){
         if (typeof callback !== "function"){
             return false;
@@ -175,7 +174,7 @@ class ToolBar{
         this.date = new Date(timestring + 'T00:00:00');
         if(this.date == "Invalid Date"){
 			this.date = new Date();
-            let timestring = `${this.date.getFullYear()}-${tcor(this.date.getMonth())}-${this.date.getDate()}T00:00:00`;
+            timestring = `${this.date.getFullYear()}-${tcor(this.date.getMonth())}-${tcor(this.date.getDate())}T00:00:00`;
             this.date = new Date(timestring);// Bug Fix
             console.log('%cToolBar: Invalide Date Detected!', 'background: #222; color: #bada55');
         }
@@ -228,8 +227,7 @@ class TaskList{
         let stDate = `${stObjDate.getFullYear()}-${tcor(stObjDate.getMonth()+1)}-${stObjDate.getDate()}`;
 
         var req = new XMLHttpRequest();
-        req.onreadystatechange = function() {  
-            
+        req.onreadystatechange = function() {
             if (this.readyState == 4) {
                 if(this.status == 200) { 
                     let json;
@@ -316,7 +314,6 @@ class TaskList{
     }
     add(name, projectID, typeID, descript, noteID, time_s, time_d, time_r = 0){
         var addTaskReq = Application.Ajax.getXmlHttp();
-
         addTaskReq.onreadystatechange = function(){
             if (this.readyState == 4) { 
                 if(this.status == 200) { 
@@ -399,24 +396,6 @@ class Ajax{
         this.requests = [];
     }
     getXmlHttp(){
-        /*
-        var xmlhttp;
-        try {
-            xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
-        }
-        catch (e) {
-            try {
-                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-            }
-            catch (E) {
-                xmlhttp = false;
-            }
-        }
-        if (!xmlhttp && typeof XMLHttpRequest !== undefined) {
-            */
-            //xmlhttp = new XMLHttpRequest();
-        //}
-        //return xmlhttp;
         return new XMLHttpRequest();
     }
 }

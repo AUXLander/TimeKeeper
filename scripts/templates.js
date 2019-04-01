@@ -25,6 +25,9 @@ var tTask = function(dataObject){
     let TODuration = TObject(dataObject.time_d);
     let height = dataObject.time_d*(150/UTHou);
     let tdiv = document.createElement('div');
+    
+    tdiv.setAttribute('data-aos', 'fade-up');
+    tdiv.setAttribute('data-aos-anchor-placement', 'top-bottom');
 
     tdiv.style.height = height;
     tdiv.style.maxHeight = height;
