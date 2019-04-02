@@ -1,13 +1,33 @@
 var Application;
-AOS.init();
 
 function datelineOn(){
-    $('#dateline')[0].classList.add('active');
-    Application.addClick(datelineOff);
+    //$('#dateline')[0].classList.add('active');
+    //Application.addClick(datelineOff);
 }
 
 function datelineOff(){
     $('#dateline')[0].classList.remove('active');
+}
+
+function auth(){
+    if(Application === undefined){return false}
+
+    Application.auth(
+        $('#auth-email')[0].value,
+        $('#auth-password')[0].value
+    );
+}
+function auth_close(){
+    $('#auth-form')[0].classList.add('an_close');
+    setTimeout(function(){
+        let auth_form = $('#auth-form')[0].classList;
+        auth_form.remove('an_close');
+        auth_form.add('close');
+    }, 200);
+}
+
+function auth_open(){
+    $('#auth-form')[0].classList.remove('close', 'an_close');
 }
 
 function selectDate(el){

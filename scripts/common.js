@@ -11,14 +11,16 @@ function tcor(key){
 class TimeKeeper{
     constructor(app){
         this.Application = app;
-        this.DateControl = new DateControl(app);
-        this.ToolBar = new ToolBar(app);
-        this.TaskList = new TaskList(app);
-        this.Ajax = new Ajax();
+        this.DateControl;// = new DateControl(app);
+        this.ToolBar;// = new ToolBar(app);
+        this.TaskList;// = new TaskList(app);
+        this.Ajax;// = new Ajax();
         //this.CheckScan = new CheckScan(app);
         //Callbacks for click
 
-        this.afterAuth()
+        //this.afterAuth()
+
+        this.isAuth();
 
         this.waitClick = [];
         document.addEventListener('click', function(){
@@ -26,9 +28,93 @@ class TimeKeeper{
                 (Application.waitClick.pop())();
             }
         }, true);
-    }
 
+        this.isAuthTrigger = false;
+        this.email = '';
+        this.password ='';
+    }
+    isAuth(){
+        var isAuth = new XMLHttpRequest();
+        isAuth.onreadystatechange = function(){
+            if (this.readyState == 4) { 
+                if(this.status == 200) {
+                    Application.isAuthTrigger = false;
+                    if(this.responseText == '1'){
+                        Application.isAuthTrigger = true;
+                    }
+                    if(!Application.isAuthTrigger){
+                        auth_open();
+                    }
+                    else{
+                        auth_close();
+                        Application.afterAuth();
+                    }
+                    this.abort();
+                    return;
+                }
+            }
+        }
+
+        isAuth.open('GET', '/php/auth/auth.php?action=isauth', true);
+        isAuth.send(null);
+    }
+    auth(email = '', password = ''){
+        if(!email.length && password.length || email.length && !password.length){
+            //TO DO
+            alert('Error!');
+            return;
+        }
+        if(!email.length && !password.length){
+            email = this.email;
+            password = this.password;
+        }
+
+        var auth = new XMLHttpRequest();
+        auth.onreadystatechange = function(){
+            if (this.readyState == 4) { 
+                if(this.status == 200) { 
+                    Application.isAuthTrigger = false;
+                    if(this.responseText == '1'){
+                        Application.isAuthTrigger = true;
+                    }
+                    if(!Application.isAuthTrigger){
+                        auth_open();
+                    }
+                    else{
+                        auth_close();
+                        Application.afterAuth();
+                    }
+                    this.abort();
+                    return;
+                }
+            }
+        }
+
+        email       = encodeURIComponent(email);
+        password    = encodeURIComponent(password);
+
+        let body = `email=${email}&password=${password}`;
+        console.log(body)
+        auth.open('POST', '/php/auth/auth.php?action=login', true); 
+        auth.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+        auth.send(body);
+    }
     afterAuth(){
+        //Загружаем компоненты
+        if(this.DateControl === undefined){
+            this.DateControl = new DateControl(this.Application);
+        }
+        if(this.ToolBar === undefined){
+            this.ToolBar = new ToolBar(this.Application);
+        }
+        if(this.TaskList === undefined){
+            this.TaskList = new TaskList(this.Application);
+        }
+        if(this.Ajax === undefined){
+            this.Ajax = new Ajax();
+        }
+
         //Обновляем данные
         this.updateProjects();
         this.updateTypes();
@@ -203,7 +289,7 @@ class TaskList{
         this.Application = app;
         this.loadTimestamps();
 
-        this.getByDate(Date.now());
+        //this.getByDate(Date.now());
 		//this.loadByDate(Date.now());
 
 		//To save in local storage
@@ -269,7 +355,7 @@ class TaskList{
                 }
             }
         }
-        console.log(stDate);
+        
         req.open('GET', '/php/task/getTask.php?date='+stDate, true);
         req.setRequestHeader('Content-type', 'application/json');
         req.send(null);
