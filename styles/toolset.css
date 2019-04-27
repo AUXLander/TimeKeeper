@@ -29,12 +29,23 @@
 /* === ===*/
 .tool.calendar{
     background: url(../img/icons/calendar.svg) center no-repeat;
+    background-size: 52px;
+    background-position-y: 7px;
 }
 /* === ===*/
 .tool.list{
     background: url(../img/icons/list.svg) center no-repeat;
+    background-size: 51px;
+    background-position-y: 8px;
 }
 /* === ===*/
 .tool.settings{
     background: url(../img/icons/settings.svg) center no-repeat;
+    background-position-y: 9px;
+}
+/* === ===*/
+.tool.qr-scan{
+    background: url(../img/icons/qr-scan.svg) center no-repeat;
+    background-size: 46px;
+    background-position-y: 11px;
 }

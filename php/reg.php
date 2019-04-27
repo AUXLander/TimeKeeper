@@ -1,5 +1,6 @@
 <?php
     //http://localhost/php/reg.php?l=admin&p=wb8q3wi552&n=Denis&s=Nikolaev&e=auxlander.1000@gmail.com
+    //http://dauxlander.beget.tech/php/auth/reg.php?l=test123&p=password123&n=test&s=test&e=test@mail.ru
     if(!isset($_GET['l'])){
         die('-1');//Не передан логин
     }
@@ -28,8 +29,10 @@
         die ('-5.0');// Некорректное мыло
     }
 
-    include 'safemysql.class.php';
-    $db = new safemysql(['db' => 'timekeeper']);
+    include '../php.sys/safemysql.class.php';
+    include '../php.sys/conn.data.php';
+    
+    $db = new safemysql(SQLDATACONNECT);
     $login = $_GET['l'];
     $pass = $_GET['p'];
     $name = $_GET['n'];

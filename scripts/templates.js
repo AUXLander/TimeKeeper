@@ -41,7 +41,7 @@ var tTask = function(dataObject){
             </div>
             <div class="task__notes">
                 <p>
-                    ${dataObject.desc}
+                    ${dataObject.description}
                 </p>
             </div>
         </div>
@@ -87,4 +87,19 @@ var tNote = function(name, icon){
     tlab.setAttribute('onclick', 'toggleNoteblock(this)');
     tlab.innerHTML = `<span class="icon ${icon}"></span><span>${name}</span>`;
     return tlab;
+}
+
+var tTableRow = function(id, strName, strType, strDate, strOverdate, boolOverdated, intPrice = 0){
+    let tdiv = document.createElement('div');
+    tdiv.setAttribute('data-product-id', id);
+    tdiv.innerHTML = 
+        `<div class="table__row${(boolOverdated ? ' red': '')}">
+            <div class="table__cell">${strName}</div>
+            <div class="table__cell">${strType}</div>
+            <div class="table__cell">${strDate}</div>
+            <div class="table__cell">${strOverdate}</div>
+            <div class="table__cell">${intPrice}$</div>
+        </div>`;
+
+    return tdiv;
 }

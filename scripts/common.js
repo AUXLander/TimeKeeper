@@ -14,7 +14,8 @@ class TimeKeeper{
         this.DateControl;// = new DateControl(app);
         this.ToolBar;// = new ToolBar(app);
         this.TaskList;// = new TaskList(app);
-        this.Ajax;// = new Ajax();
+        this.SmartFridge;// = new SmartFridge();
+        this.QRCam;
         //this.CheckScan = new CheckScan(app);
         //Callbacks for click
 
@@ -111,8 +112,11 @@ class TimeKeeper{
         if(this.TaskList === undefined){
             this.TaskList = new TaskList(this.Application);
         }
-        if(this.Ajax === undefined){
-            this.Ajax = new Ajax();
+        if(this.SmartFridge === undefined){
+            this.SmartFridge = new SmartFridge();
+        }
+        if(this.QRCam == undefined){
+            this.QRCam = new QRCam();
         }
 
         //Обновляем данные
@@ -262,7 +266,7 @@ class ToolBar{
 			this.date = new Date();
             timestring = `${this.date.getFullYear()}-${tcor(this.date.getMonth())}-${tcor(this.date.getDate())}T00:00:00`;
             this.date = new Date(timestring);// Bug Fix
-            console.log('%cToolBar: Invalide Date Detected!', 'background: #222; color: #bada55');
+            console.warn('ToolBar: Invalide Date Detected!');
         }
         this.setDate(
             WDayName[this.date.getDay()],
@@ -306,7 +310,6 @@ class TaskList{
         return countStamps;
     }
     getByDate(date){
-        
         this.clear();
 
         let stObjDate = new Date(date);
@@ -399,7 +402,7 @@ class TaskList{
         }
     }
     add(name, projectID, typeID, descript, noteID, time_s, time_d, time_r = 0){
-        var addTaskReq = Application.Ajax.getXmlHttp();
+        var addTaskReq = new XMLHttpRequest();
         addTaskReq.onreadystatechange = function(){
             if (this.readyState == 4) { 
                 if(this.status == 200) { 
@@ -476,13 +479,497 @@ class TaskList{
     }
 }
 
-
-class Ajax{
+class SmartFridge{
     constructor(){
-        this.requests = [];
+        //Количество испортившихся продуктов
+        this.overdue = 0;// TO DO подгрузка из кэша.
+        this.checkCache();
+        this.cleanCache();
+        this.tableConteiner = $('#product-table-conteiner')[0];
+
+        this.dload();
     }
-    getXmlHttp(){
-        return new XMLHttpRequest();
+    //Синхронизирует данные между сервером и кэшем
+    synch(){
+        this.checkCache();
+        this.cleanCache();
+        //TO DO
+    }
+    //Получает данные от сервера и добавляет их в кеш
+    dload(){
+        var ajax = new XMLHttpRequest();
+        ajax.onreadystatechange = function(){
+            if (this.readyState == 4) { 
+                if(this.status == 200) { 
+                    let json;
+                    try{
+                        json = JSON.parse(this.responseText);
+                    }
+                    catch(e){
+                        if(this.responseText != "NULL"){
+                            console.log(e);
+                        }
+                        this.abort();
+                        return;
+                    }
+                    let isset = false;
+                    let object = null;
+                    let origin_len = productData.length;
+                    
+                    for(let j, i = 0; i < json.length; i++){
+                        isset = false;
+                        //TO DO бинарный поиск
+                        for(j = 0; j < origin_len; j++){
+                            if(productData[j].productID == json[i].productID){
+                                isset = true;
+                                break;
+                            }
+                        }
+                        object = {
+                            productID: parseInt(json[i].productID),
+                            userID : userData.userID,
+                            productName : json[i].productName,
+                            productTypeID : parseInt(json[i].productTypeID),
+                            productTime_s : json[i].productTime_s,
+                            productTime_d : parseInt(json[i].productTime_d),
+                            productOverdue : 
+                                Date.now() > DateAddDays(json[i].productTime_s, json[i].productTime_d).getTime(),
+                            confirmed : false
+                        };
+                        if(!isset){
+                            productData.push(object);
+                        }
+                        else{
+                            productData[j] = object;
+                        }
+                    }
+
+                    Application.SmartFridge.draw();
+
+                    this.abort();
+                    return;
+                }
+            }
+        }
+        
+        ajax.open('GET', '/php/product/getProducts.php', true);
+        ajax.send();
+    }
+    //Отправляет данные на сервер 
+    uload(){
+        //TO DO
+    }
+    //Проверяет продукты на испорченность, изменяет их статус и возвращает количество новых испорченных
+    checkCache(){
+        let dateToday = new Date(Date.now());
+        let countOverdue = 0;
+        for(let i=0;i<productData.length;i++){
+            if(!productData[i].productOverdue){
+                if(dateToday >= DateAddDays(productData[i].productTime_s, productData[i].productTime_d)){
+                    productData[i].productOverdue = true;
+                    countOverdue++;
+                }
+            }
+        }
+        this.overdue += countOverdue;
+        return countOverdue;
+    }
+    //Удаляет из кеша продукты, которое были отмечены, как удаленные.
+    cleanCache(){
+        for(let i=0;i<productData.length;i++){
+            if(productData[i].productOverdue && productData[i].confirmed){
+                productData[i] = [];
+            }
+        }
+    }
+    //добавляет все строки в таблицу
+    draw(){
+        let items = $('#product-table-conteiner > .table__row');
+        for(let i = 1; i < items.length; i++){
+            items[i].remove();
+        }
+        for(let i = 0; i < productData.length; i++){
+            this.drawLine(
+                productData[i].productID,
+                productData[i].productName,
+                productData[i].productTypeID,
+                productData[i].productTime_s,
+                productData[i].productTime_d,
+                productData[i].productOverdue,
+                0
+            );
+        }
+    }
+    //добавляет строку в таблицу
+    drawLine(intID, name, intType, strDate, intDuration, boolOverdated, price){
+        let overdate = DateAddDays(strDate, intDuration);
+        overdate = `${overdate.getFullYear()}-${tcor(overdate.getMonth() + 1)}-${overdate.getDate()}`;
+        
+        this.tableConteiner.appendChild(
+            tTableRow(intID, name, productType[intType], strDate, overdate, boolOverdated, price)
+        );
+    }
+    //Разбивает строку с чека на массив с данными 
+    parseStringOFD(strQRString){
+        let array = strQRString.split('&');
+        for(let i = 0; i < array.length; i++){
+            array[i] = array[i].split('=');
+            array[i].splice(0,1);
+            array[i] = array[i][0];
+        }
+        return array;
+    }
+    //Демонстрационное добавление продуктов с заранее выбранным чеком
+    demoOFDproduct(arrstrOFDData){
+        if(arrstrOFDData[2] == "9282000100147203"){
+            //TO DO
+        }
     }
 }
+
+var video = $('#qr-video')[0];
+var camHasCamera = $('#cam-has-camera')[0];
+var camQrResult = $('#cam-qr-result')[0]; 
+var fileSelector = $('#file-selector')[0];
+var fileQrResult =  $('#file-qr-result')[0];
+
+class QRScanner {
+    static hasCamera() {
+        return navigator.mediaDevices.enumerateDevices()
+            .then(devices => devices.some(device => device.kind === 'videoinput'))
+            .catch(() => false);
+    }
+    constructor(video, onDecode, canvasSize = QRScanner.DEFAULT_CANVAS_SIZE) {
+        this.$video = video;
+        this.$canvas = document.createElement('canvas');
+        this._onDecode = onDecode;
+        this._active = false;
+        this._paused = false;
+
+        this.$canvas.width = canvasSize;
+        this.$canvas.height = canvasSize;
+        this._sourceRect = {
+            x: 0,
+            y: 0,
+            width: canvasSize,
+            height: canvasSize
+        };
+
+        this._onCanPlay = this._onCanPlay.bind(this);
+        this._onPlay = this._onPlay.bind(this);
+        this._onVisibilityChange = this._onVisibilityChange.bind(this);
+
+        this.$video.addEventListener('canplay', this._onCanPlay);
+        this.$video.addEventListener('play', this._onPlay);
+        document.addEventListener('visibilitychange', this._onVisibilityChange);
+
+        this._qrWorker = new Worker(QRScanner.WORKER_PATH);
+    }
+    destroy() {
+        this.$video.removeEventListener('canplay', this._onCanPlay);
+        this.$video.removeEventListener('play', this._onPlay);
+        document.removeEventListener('visibilitychange', this._onVisibilityChange);
+
+        this.stop();
+        this._qrWorker.postMessage({
+            type: 'close'
+        });
+    }
+    start() {
+        if (this._active && !this._paused) {
+            return Promise.resolve();
+        }
+        if (window.location.protocol !== 'https:') {
+            console.warn('The camera stream is only accessible if the page is transferred via https.');
+        }
+        this._active = true;
+        this._paused = false;
+        if (document.hidden) {
+            return Promise.resolve();
+        }
+        clearTimeout(this._offTimeout);
+        this._offTimeout = null;
+        if (this.$video.srcObject) {
+            // camera stream already/still set
+            this.$video.play();
+            return Promise.resolve();
+        }
+
+        let facingMode = 'environment';
+        return this._getCameraStream('environment', true)
+            .catch(() => {
+                facingMode = 'user';
+                return this._getCameraStream();
+            })
+            .then(stream => {
+                this.$video.srcObject = stream;
+                this._setVideoMirror(facingMode);
+            })
+            .catch(e => {
+                this._active = false;
+                throw e;
+            });
+    }
+    stop() {
+        this.pause();
+        this._active = false;
+    }
+    pause() {
+        this._paused = true;
+        if (!this._active) {
+            return;
+        }
+        this.$video.pause();
+        if (this._offTimeout) {
+            return;
+        }
+        this._offTimeout = setTimeout(() => {
+            const track = this.$video.srcObject && this.$video.srcObject.getTracks()[0];
+            if (!track) return;
+            track.stop();
+            this.$video.srcObject = null;
+            this._offTimeout = null;
+        }, 300);
+    }
+    static scanImage(imageOrFileOrUrl, sourceRect=null, worker=null, canvas=null, fixedCanvasSize=false,
+                     alsoTryWithoutSourceRect=false) {
+        let createdNewWorker = false;
+        let promise = new Promise((resolve, reject) => {
+            if (!worker) {
+                worker = new Worker(QRScanner.WORKER_PATH);
+                createdNewWorker = true;
+                worker.postMessage({ type: 'inversionMode', data: 'both' });
+            }
+            let timeout, onMessage, onError;
+            onMessage = event => {
+                if (event.data.type !== 'qrResult') {
+                    return;
+                }
+                worker.removeEventListener('message', onMessage);
+                worker.removeEventListener('error', onError);
+                clearTimeout(timeout);
+                if (event.data.data !== null) {
+                    resolve(event.data.data);
+                } else {
+                    reject('QR code not found.');
+                }
+            };
+            onError = (e) => {
+                worker.removeEventListener('message', onMessage);
+                worker.removeEventListener('error', onError);
+                clearTimeout(timeout);
+                const errorMessage = !e ? 'Unknown Error' : (e.message || e);
+                reject('Scanner error: ' + errorMessage);
+            };
+            worker.addEventListener('message', onMessage);
+            worker.addEventListener('error', onError);
+            timeout = setTimeout(() => onError('timeout'), 3000);
+            QRScanner._loadImage(imageOrFileOrUrl).then(image => {
+                const imageData = QRScanner._getImageData(image, sourceRect, canvas, fixedCanvasSize);
+                worker.postMessage({
+                    type: 'decode',
+                    data: imageData
+                }, [imageData.data.buffer]);
+            }).catch(onError);
+        });
+
+        if (sourceRect && alsoTryWithoutSourceRect) {
+            promise = promise.catch(() => QRScanner.scanImage(imageOrFileOrUrl, null, worker, canvas, fixedCanvasSize));
+        }
+
+        promise = promise.finally(() => {
+            if (!createdNewWorker) return;
+            worker.postMessage({
+                type: 'close'
+            });
+        });
+
+        return promise;
+    }
+    setGrayscaleWeights(red, green, blue, useIntegerApproximation = true) {
+        this._qrWorker.postMessage({
+            type: 'grayscaleWeights',
+            data: { red, green, blue, useIntegerApproximation }
+        });
+    }
+    setInversionMode(inversionMode) {
+        this._qrWorker.postMessage({
+            type: 'inversionMode',
+            data: inversionMode
+        });
+    }
+    _onCanPlay() {
+        this._updateSourceRect();
+        this.$video.play();
+    }
+    _onPlay() {
+        this._updateSourceRect();
+        this._scanFrame();
+    }
+    _onVisibilityChange() {
+        if (document.hidden) {
+            this.pause();
+        } else if (this._active) {
+            this.start();
+        }
+    }
+    _updateSourceRect() {
+        const smallestDimension = Math.min(this.$video.videoWidth, this.$video.videoHeight);
+        const sourceRectSize = Math.round(2 / 3 * smallestDimension);
+        this._sourceRect.width = this._sourceRect.height = sourceRectSize;
+        this._sourceRect.x = (this.$video.videoWidth - sourceRectSize) / 2;
+        this._sourceRect.y = (this.$video.videoHeight - sourceRectSize) / 2;
+    }
+    _scanFrame() {
+        if (!this._active || this.$video.paused || this.$video.ended) return false;
+        requestAnimationFrame(() => {
+            QRScanner.scanImage(this.$video, this._sourceRect, this._qrWorker, this.$canvas, true)
+                .then(this._onDecode, error => {
+                    if (this._active && error !== 'QR code not found.') {
+                        console.error(error);
+                    }
+                })
+                .then(() => this._scanFrame());
+        });
+    }
+    _getCameraStream(facingMode, exact = false) {
+        const constraintsToTry = [{
+            width: { min: 1024 }
+        }, {
+            width: { min: 768 }
+        }, {}];
+
+        if (facingMode) {
+            if (exact) {
+                facingMode = { exact: facingMode };
+            }
+            constraintsToTry.forEach(constraint => constraint.facingMode = facingMode);
+        }
+        return this._getMatchingCameraStream(constraintsToTry);
+    }
+    _getMatchingCameraStream(constraintsToTry) {
+        if (constraintsToTry.length === 0) {
+            return Promise.reject('Camera not found.');
+        }
+        return navigator.mediaDevices.getUserMedia({
+            video: constraintsToTry.shift()
+        }).catch(() => this._getMatchingCameraStream(constraintsToTry));
+    }
+    _setVideoMirror(facingMode) {
+        const scaleFactor = facingMode==='user'? -1 : 1;
+        this.$video.style.transform = 'scaleX(' + scaleFactor + ')';
+    }
+    static _getImageData(image, sourceRect=null, canvas=null, fixedCanvasSize=false) {
+        canvas = canvas || document.createElement('canvas');
+        const sourceRectX = sourceRect && sourceRect.x? sourceRect.x : 0;
+        const sourceRectY = sourceRect && sourceRect.y? sourceRect.y : 0;
+        const sourceRectWidth = sourceRect && sourceRect.width? sourceRect.width : image.width || image.videoWidth;
+        const sourceRectHeight = sourceRect && sourceRect.height? sourceRect.height : image.height || image.videoHeight;
+        if (!fixedCanvasSize && (canvas.width !== sourceRectWidth || canvas.height !== sourceRectHeight)) {
+            canvas.width = sourceRectWidth;
+            canvas.height = sourceRectHeight;
+        }
+        const context = canvas.getContext('2d', { alpha: false });
+        context.imageSmoothingEnabled = false;
+        context.drawImage(image, sourceRectX, sourceRectY, sourceRectWidth, sourceRectHeight, 0, 0, canvas.width, canvas.height);
+        return context.getImageData(0, 0, canvas.width, canvas.height);
+    }
+    static _loadImage(imageOrFileOrUrl) {
+        if (imageOrFileOrUrl instanceof HTMLCanvasElement || imageOrFileOrUrl instanceof HTMLVideoElement
+            || window.ImageBitmap && imageOrFileOrUrl instanceof window.ImageBitmap
+            || window.OffscreenCanvas && imageOrFileOrUrl instanceof window.OffscreenCanvas) {
+            return Promise.resolve(imageOrFileOrUrl);
+        } else if (imageOrFileOrUrl instanceof Image) {
+            return QRScanner._awaitImageLoad(imageOrFileOrUrl).then(() => imageOrFileOrUrl);
+        } else if (imageOrFileOrUrl instanceof File || imageOrFileOrUrl instanceof URL
+            ||  typeof(imageOrFileOrUrl)==='string') {
+            const image = new Image();
+            if (imageOrFileOrUrl instanceof File) {
+                image.src = URL.createObjectURL(imageOrFileOrUrl);
+            } else {
+                image.src = imageOrFileOrUrl;
+            }
+            return QRScanner._awaitImageLoad(image).then(() => {
+                if (imageOrFileOrUrl instanceof File) {
+                    URL.revokeObjectURL(image.src);
+                }
+                return image;
+            });
+        } else {
+            return Promise.reject('Unsupported image type.');
+        }
+    }
+    static _awaitImageLoad(image) {
+        return new Promise((resolve, reject) => {
+            if (image.complete && image.naturalWidth!==0) {
+                resolve();
+            } else {
+                let onLoad, onError;
+                onLoad = () => {
+                    image.removeEventListener('load', onLoad);
+                    image.removeEventListener('error', onError);
+                    resolve();
+                };
+                onError = () => {
+                    image.removeEventListener('load', onLoad);
+                    image.removeEventListener('error', onError);
+                    reject('Image load error');
+                };
+                image.addEventListener('load', onLoad);
+                image.addEventListener('error', onError);
+            }
+        });
+    }
+}
+QRScanner.DEFAULT_CANVAS_SIZE = 400;
+QRScanner.WORKER_PATH = 'scripts/qr-scanner-worker.min.js';
+
+class QRCam{
+    constructor(){
+        this.scanner = undefined;
+        this.scanCam();
+        this.scanFile();
+    }
     
+    scanCam(){
+        if(this.scanner == undefined){
+            // ####### Web Cam Scanning #######
+            QRScanner.hasCamera().then(hasCamera => camHasCamera.textContent = hasCamera);
+            this.scanner = new QRScanner(video, result => setResult(camQrResult, result));
+            this.scanner.start();
+            $('#inversion-mode-select')[0].addEventListener('change', event => {
+                this.scanner.setInversionMode(event.target.value);
+            });
+        }
+        else{
+            this.scanner.start();
+        }
+    }
+    scanFile(){
+        // ####### File Scanning #######
+        //TO DO
+        fileSelector.addEventListener('change', event => {
+            const file = fileSelector.files[0];
+            if (!file) {
+                return;
+            }
+            QRScanner.scanImage(file)
+                .then(result => setResult(fileQrResult, result))
+                .catch(e => setResult(fileQrResult, e || 'No QR code found.'));
+        });
+    }
+    stop(){
+        if(this.scanner != undefined){
+            this.scanner.stop();
+        }
+    }
+
+}
+    
+function setResult(label, result) {
+    label.textContent = result;
+}
+
+function DateAddDays(strDate, intDays){
+    return new Date(new Date(strDate).getTime() + UTDay*1000*intDays);
+}

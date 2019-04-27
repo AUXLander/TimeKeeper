@@ -53,6 +53,7 @@
 
             </div>
         </div>
+
         <div page="notes" id="notelist" class="wrapper notelist flexlist" hidden>
             <div class="noteblock flexlist">
                 <label onclick="toggleNoteblock(this)">
@@ -99,13 +100,22 @@
             </div>
 
         </div> 
+
+        <div page="settings" hidden>
+            <button id="get-data">GET DATA</button>
+            <div id="data conteiner">
+
+                
+            </div>
+        </div>
     </main>
 
     <footer>
         <div class="footer__wrap wrapper toolset">
-            <button for-page="calendar" class="tool calendar" onclick="choosePage(this)"></button>
-            <button for-page="notes" class="tool list" onclick="choosePage(this)"></button>
-            <button for-page="settings" class="tool settings" onclick="choosePage(this)"></button>
+            <button for-page    ="calendar"     class="tool calendar"   onclick="choosePage(this)"></button>
+            <button for-page    ="notes"        class="tool list"       onclick="choosePage(this)"></button>
+            <button layer-call  ="scanCam"      class="tool qr-scan"    onclick="openLayer(this)" ></button>
+            <button for-page    ="settings"     class="tool settings"   onclick="choosePage(this)"></button>
         </div>
     </footer>
 
@@ -149,40 +159,33 @@
                 <div class="note-items" style="min-height: 100%">
                     <div class="note-item" style="flex: 1">
                         <div class="note-item__wrap">
-                            <table style="table-layout: fixed; width: 100%;text-align: left; border: 1px solid #ccc">
-                                <colgroup>
-                                    <col style="width: 75px">
-                                    <col style="width: 71px">
-                                    <col style="width: 157px">
-                                    <col style="width: 108px">
-                                    <col style="width: 150px">
-                                </colgroup>
-                                <tr>
-                                    <th>название</th>
-                                    <th>тип</th>
-                                    <th>дата покупки</th>
-                                    <th>срок хранения</th>
-                                    <th>стоимость</th>
-                                </tr>
-                                <tr>
-                                    <td>молоко</td>
-                                    <td>молочные продукты</td>
-                                    <td>27.03.2019</td>
-                                    <td>7 дней</td>
-                                    <td>45р</td>
-                                </tr>
-                            </table>
+                            <!--- ########## --->
+
+
+                            <div class="table">
+                                <div id="product-table-conteiner" class="table__wrap">
+
+
+                                    <div class="table__row main">
+                                        <div class="table__cell">Name</div>
+                                        <div class="table__cell">Type</div>
+                                        <div class="table__cell">Date</div>
+                                        <div class="table__cell">Over Date</div>
+                                        <div class="table__cell">Price</div>
+                                    </div>
+
+
+
+
+                                </div>
+                            </div> 
+
+
+
+                            <!--- ########## --->
                         </div>
                     </div>
-
-
-
-
-
-                    
-                </div> 
-                
-
+                </div>
             </div>
         </div>
     </div>
@@ -230,14 +233,54 @@
         </div>
     </div>
 
+    <div layer-data="scanCam" class="layer bottom">
+        <div class="layer__toolset">
+            <button class="text-btn layer__close" onclick="closeLayer()">Cancel</button>
+            <div class="layer__title"><span>QR Camera Scan</span></div>
+        </div>
+        <div class="layer__wrap">
+            <div class="layer__content content_wrapped">
 
+                <b>Device has camera: </b>
+                <span id="cam-has-camera"></span>
+                <br>
+                <video muted playsinline id="qr-video"></video>
+
+                <select id="inversion-mode-select" style="display:none">
+                    <option value="original">Scan original (dark QR code on bright background)</option>
+                    <option value="invert">Scan with inverted colors (bright QR code on dark background)</option>
+                    <option value="both">Scan both</option>
+                </select>
+                <br>
+                <b>Detected QR code: </b>
+                <span id="cam-qr-result">None</span>
+                <br>
+                <hr>
+    
+                <h1>Scan from File:</h1>
+                <input type="file" id="file-selector">
+                <br>
+                <br>
+                <br>
+                <b>Detected QR code: </b>
+                <span id="file-qr-result">None</span>
+
+            </div>
+
+        </div>
+        
+    </div>
 
     <style class="calendar-style"></style>
 
+    
     <script src="scripts/toolset.js"></script>
     <script src="scripts/data.js"></script>
     <script src="scripts/templates.js"></script>
-
+    <script type="module">
+    </script>
     <script src="scripts/common.js"></script>
     <script src="scripts/gui-connection.js"></script>
+
+
 </body>
