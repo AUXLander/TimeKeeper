@@ -33,6 +33,23 @@ var tTask = function(dataObject){
     tdiv.style.maxHeight = height;
     tdiv.style.top = (dataObject.time_s - data.time.start) / UTHou * 150;
     tdiv.classList.add('task');
+
+    for(let i = 0; i < projectData.length; i++){
+        console.log(projectData[i].projectID);
+        if(projectData[i].projectID == dataObject.projectID){
+            dataObject.projectID = projectData[i].project_name;
+            break;
+        }
+    }
+
+    for(let i = 0; i < typeData.length; i++){
+        console.log(typeData[i].typeID);
+        if(typeData[i].typeID == dataObject.typeID){
+            dataObject.typeID = typeData[i].type_name;
+            break;
+        }
+    }
+
     tdiv.innerHTML = `
     <div class="task__info">
         <div class="task__wrap">

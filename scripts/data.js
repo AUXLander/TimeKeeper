@@ -8,16 +8,16 @@ var taskData = [];
 var noteData = [];
 var projectData = [
     {
-        projectID: 0,
-        name: '',
+        projectID: -1,
+        project_name: "No project",
         description: ''
     }
 ];
 var typeData = [
     {
-        typeID: 0,
+        typeID: -1,
         userID: 0,
-        type_name: ''
+        type_name: "No type"
     }
 ];
 
@@ -25,7 +25,7 @@ var productData = [];
 var productType = ["Milk", "Meat", "Fruts", "Vegetables", "Exceptions"];
 
 var userData = {
-    userName : 'Denis',
+    userName : "Denis",
     userID   : 0
 };
 

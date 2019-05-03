@@ -6,31 +6,31 @@
     <link rel="stylesheet" href="styles/toolset.css">
     <link rel="stylesheet" href="styles/layer.css">
 
-    <meta name="google" content="notranslate">
-    <meta name="viewport" content="width=device-width, minimum-scale=0.6, initial-scale=0.6, maximum-scale=0.6, user-scalable=no">
+    <meta name="google"     content="notranslate">
+    <meta name="viewport"   content="width=device-width, minimum-scale=0.6, initial-scale=0.6, maximum-scale=0.6, user-scalable=no">
 </head>
 <body current-page="calendar">
     <header>
         <div page="calendar">
             <div class="header__date">
                 <div id="dateline" class="dateline" onclick="datelineOn()">
-
+                    <!-- EMPTY -->
                 </div>
             </div>
             <div class="toolbar wrapper header__calendar">
                 <div class="toobar__wrap">
                     <div class="row">
-                        <b id="sel-date"></b>
-                        <span opc id="sel-date-cost"></span>
+                        <b id="sel-date"><!-- EMPTY --></b>
+                        <span opc id="sel-date-cost"><!-- EMPTY --></span>
                     </div>
                     <div class="row logged-data">
                         <b id="day-short-plan" big>5 meetings</b>
                         <span id="day-addc-data" opc>, 5h free</span>
                     </div>
                     <div class="toolbar__toolset toolset">
-                        <button class="tool"></button>
-                        <button class="tool"></button>
-                        <button class="tool add" layer-call="addTask" onclick="openLayer(this)"></button>
+                        <button class="tool"><!-- EMPTY --></button>
+                        <button class="tool"><!-- EMPTY --></button>
+                        <button class="tool add" layer-call="addTask" onclick="openLayer(this)"><!-- EMPTY --></button>
                     </div>
                 </div>
             </div>
@@ -40,7 +40,7 @@
                 <div class="toobar__wrap">
                     <label class="row page-title">Notes</label>
                     <div class="toolbar__toolset toolset">
-                        <button class="tool add"></button>
+                        <button class="tool add"><!-- EMPTY --></button>
                     </div>
                 </div>
             </div>
@@ -48,49 +48,51 @@
     </header>
     <main>
         <div page="calendar" class="wrapper tasklist-wrap">
-            <div id="timeline" class="timeline"></div>
+            <div id="timeline" class="timeline">
+                <!-- EMPTY -->
+            </div>
             <div id="tasklist" class="tasklist">
-
+                <!-- EMPTY -->
             </div>
         </div>
 
-        <div page="notes" id="notelist" class="wrapper notelist flexlist" hidden>
+        <div page="notes" id="notelist" class="notelist flexlist" hidden>
             <div class="noteblock flexlist">
                 <label onclick="toggleNoteblock(this)">
-                    <span class="icon"></span>
+                    <span class="icon notegr"><!-- EMPTY --></span>
                     <span>Для дома</span>
                 </label>
                 <div class="noteblock__wrap flexlist">
                     <div class="noteblock flexlist">
                         <label onclick="toggleNoteblock(this)">
-                            <span class="icon"></span>
+                            <span class="icon notebl"><!-- EMPTY --></span>
                             <span>Купить</span>
                         </label>
                         <div class="noteblock__wrap flexlist">
                             <div class="noteblock flexlist" layer-call="note" onclick="openLayer(this)">
                                 <label onclick="toggleNoteblock(this)">
-                                    <span class="icon"></span>
-                                    <span>Заметка(редактируема)</span>
+                                    <span class="icon note"><!-- EMPTY --></span>
+                                    <span>Для салата</span>
                                 </label>
                                 <div class="noteblock__wrap flexlist">
-                                    
+                                    <!-- EMPTY -->
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="noteblock flexlist">
                         <label onclick="toggleNoteblock(this)">
-                            <span class="icon"></span>
+                            <span class="icon notebl"><!-- EMPTY --></span>
                             <span>Куплено</span>
                         </label>
                         <div class="noteblock__wrap flexlist" layer-call="noteList" onclick="openLayer(this)">
                             <div class="noteblock flexlist">
                                 <label onclick="toggleNoteblock(this)">
-                                    <span class="icon"></span>
-                                    <span>Список(нередактируемый)</span>
+                                    <span class="icon note"><!-- EMPTY --></span>
+                                    <span>Список продуктов</span>
                                 </label>
                                 <div class="noteblock__wrap flexlist">
-                                    
+                                    <!-- EMPTY -->
                                 </div>
                             </div>
                         </div>
@@ -104,18 +106,17 @@
         <div page="settings" hidden>
             <button id="get-data">GET DATA</button>
             <div id="data conteiner">
-
-                
+                <!-- EMPTY -->    
             </div>
         </div>
     </main>
 
     <footer>
         <div class="footer__wrap wrapper toolset">
-            <button for-page    ="calendar"     class="tool calendar"   onclick="choosePage(this)"></button>
-            <button for-page    ="notes"        class="tool list"       onclick="choosePage(this)"></button>
-            <button layer-call  ="scanCam"      class="tool qr-scan"    onclick="openLayer(this)" ></button>
-            <button for-page    ="settings"     class="tool settings"   onclick="choosePage(this)"></button>
+            <button for-page    = "calendar"     class="tool calendar"   onclick="choosePage(this)"><!-- EMPTY --></button>
+            <button for-page    = "notes"        class="tool list"       onclick="choosePage(this)"><!-- EMPTY --></button>
+            <button layer-call  = "scanCam"      class="tool qr-scan"    onclick="openLayer(this)" ><!-- EMPTY --></button>
+            <button for-page    = "settings"     class="tool settings"   onclick="choosePage(this)"><!-- EMPTY --></button>
         </div>
     </footer>
 
@@ -123,27 +124,34 @@
         <div class="layer__toolset">
             <button class="text-btn layer__close" onclick="closeLayer()">Cancel</button>
             <div class="toolset">
-                <button class="text-btn layer__close" onclick="closeLayer();addTask(this)">Done</button>
+                <button class="text-btn layer__done" onclick="closeLayer();addTask()">Done</button>
             </div>
         </div>
         <div class="layer__wrap">
             <div class="layer__content">
-                <!--<div class="block"></div>-->
+                <!--
+                    <div class="block"></div>
+                -->
                 <div class="txt_f">
                     <label>Add new</label>
-                    <input id="task-name" type="text" placeholder="Name"/>
-                    <input id="task-project" type="text" placeholder="Project"/>
-                    <input id="task-type" type="text" placeholder="Project type"/>
+                    <input  id="task-name" type="text" placeholder="Name"/>
+                    <select id="task-project"   class="project-selector"></select>
+                    <select id="task-type"      class="type-selector"></select>
+                    <!--
+                        <input id="task-project" type="text" placeholder="Project"/>
+                        <input id="task-type" type="text" placeholder="Project type"/>
+                    -->
                     <textarea id="task-description" placeholder="Notes"></textarea>
                 </div>
                 <div class="txt_f">
                     <label>Time settings</label>
-                    <input id="task-start" type="time" name="time" min="05:00" max="23:00" value="05:00" required/>
-                    <input id="task-dur" type="time" name="time" min="00:00" max="18:00" value="01:00" required/>
+                    <input id="task-start"  type="time" name="time" min="05:00" max="23:00" value="05:00" required/>
+                    <input id="task-dur"    type="time" name="time" min="00:00" max="18:00" value="01:00" required/>
                 </div>
-
-                <div class="btn_f">
-
+                <div class="txt_f center">
+                    <div class="btn_f" onclick="closeLayer();addTask()">
+                        <span>Add</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -156,16 +164,12 @@
         </div>
         <div class="layer__wrap">
             <div class="layer__content">
-                <div class="note-items" style="min-height: 100%">
-                    <div class="note-item" style="flex: 1">
+                <div class="note-items" style="min-height: 100%"><!--TO DO style-->
+                    <div class="note-item" style="flex: 1"><!--TO DO style-->
                         <div class="note-item__wrap">
                             <!--- ########## --->
-
-
                             <div class="table">
                                 <div id="product-table-conteiner" class="table__wrap">
-
-
                                     <div class="table__row main">
                                         <div class="table__cell">Name</div>
                                         <div class="table__cell">Type</div>
@@ -173,15 +177,8 @@
                                         <div class="table__cell">Over Date</div>
                                         <div class="table__cell">Price</div>
                                     </div>
-
-
-
-
                                 </div>
-                            </div> 
-
-
-
+                            </div>
                             <!--- ########## --->
                         </div>
                     </div>
@@ -201,19 +198,29 @@
                     <div class="note-item" style="flex: 1">
                         <div class="note-item__wrap">
                             <div class="note-area" contenteditable="true">
-                                какая-то заметочка че хочу то пишу
+                                Салат "Фунчоза с овощами"<br><br>
+                                Продукты:<br>
+                                Фунчоза - 150 г<br>
+                                Перец болгарский красный - 1-2 шт.<br>
+                                Лук репчатый - 1-2 шт.<br>
+                                Морковь свежая (крупная) - 1 шт.<br>
+                                Огурец свежий - 1 шт.<br>
+                                Соус соевый - по вкусу<br>
+                                Соль - по вкусу<br>
+                                Масло растительное - для обжарки<br>
+                                Кунжут - для украшения<br><br><br>
+
+                                
+                                1) Нарежьте овощи симпатичными брусочками. Для своего удобства морковь я измельчила с помощью овощетерки.<br><br>
+                                2) На хорошо разогретой сковороде обжарьте морковь, лук и перец на растительном масле в течение 10 минут.<br><br>
+                                3) Приготовьте фунчозу по инструкции, указанной на упаковке. Я обычно варю фунчозу ровно 3 минуты, и она получается идеальной, на мой вкус.<br><br>
+                                4) Как только фунчоза будет готова, слейте воду и добавьте обжаренные на сковороде овощи и огурец.<br><br>
+                                Фунчозу с овощами заправьте соевым соусом по вашему вкусу. Для более аппетитного вида я добавляю небольшую горсть кунжута. 
+                                Салат "Фунчоза с овощами" готов к употреблению! Всем приятного аппетита и хорошего настроения!
                             </div>
                         </div>
                     </div>
-
-
-
-
-
-                    
-                </div> 
-                
-
+                </div>
             </div>
         </div>
     </div>
@@ -229,22 +236,24 @@
         </div>
 
         <div id="btn-auth" class="btn_f" onclick="auth()">
-            <span>press it!</span>
+            <span>LOG IN</span>
         </div>
     </div>
 
     <div layer-data="scanCam" class="layer bottom">
         <div class="layer__toolset">
-            <button class="text-btn layer__close" onclick="closeLayer()">Cancel</button>
+            <button class="text-btn layer__close"><!-- EMPTY --></button>
             <div class="layer__title"><span>QR Camera Scan</span></div>
+            <button class="text-btn layer__close" onclick="closeLayer()">Done</button>
         </div>
         <div class="layer__wrap">
             <div class="layer__content content_wrapped">
-
+                <!--
                 <b>Device has camera: </b>
                 <span id="cam-has-camera"></span>
                 <br>
-                <video muted playsinline id="qr-video"></video>
+                -->
+                <video class="scanCam__video" muted playsinline id="qr-video"></video>
 
                 <select id="inversion-mode-select" style="display:none">
                     <option value="original">Scan original (dark QR code on bright background)</option>
@@ -252,35 +261,40 @@
                     <option value="both">Scan both</option>
                 </select>
                 <br>
+                <!--
                 <b>Detected QR code: </b>
                 <span id="cam-qr-result">None</span>
                 <br>
-                <hr>
-    
-                <h1>Scan from File:</h1>
-                <input type="file" id="file-selector">
-                <br>
-                <br>
-                <br>
+                -->
+                <input type="file" id="file-selector" style="display:none">
+                <div class="txt_f center">
+                    <label>Scan from file</label>
+                    <div class="btn_f" onclick="$('#file-selector')[0].click()">
+                        <span>Select photo</span>
+                    </div>
+                    <br>
+                    <br>
+                    <div class="btn_f" onclick="closeLayer()">
+                        <span>CLOSE</span>
+                    </div>
+                </div>
+                <!--
                 <b>Detected QR code: </b>
                 <span id="file-qr-result">None</span>
-
+                -->
             </div>
 
         </div>
         
     </div>
 
-    <style class="calendar-style"></style>
+    <style class="calendar-style">
+        /* EMPTY */
+    </style>
 
-    
     <script src="scripts/toolset.js"></script>
     <script src="scripts/data.js"></script>
     <script src="scripts/templates.js"></script>
-    <script type="module">
-    </script>
     <script src="scripts/common.js"></script>
     <script src="scripts/gui-connection.js"></script>
-
-
 </body>

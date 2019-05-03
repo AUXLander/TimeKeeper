@@ -10,7 +10,7 @@ function datelineOff(){
 }
 
 function auth(){
-    if(Application === undefined){return false}
+    if(Application === undefined){return}
 
     Application.auth(
         $('#auth-email')[0].value,
@@ -30,52 +30,57 @@ function auth_open(){
     $('#auth-form')[0].classList.remove('close', 'an_close');
 }
 
-function selectDate(el){
-    if(Application === undefined){return false}
+function selectDate(element){
+    if(Application === undefined){return}
 
     $('.date.selected')[0].classList.remove('selected');
-    Application.DateControl.selectedDate = el.getAttribute('data-date');
-    Application.ToolBar.updateDate(el.getAttribute('data-date'));
-    Application.TaskList.getByDate(el.getAttribute('data-date'));
-    el.classList.add('selected');
+    Application.DateControl.selectedDate = element.getAttribute('data-date');
+    Application.ToolBar.updateDate(element.getAttribute('data-date'));
+    Application.TaskList.getByDate(element.getAttribute('data-date'));
+    element.classList.add('selected');
 }
 
-function addTask(el){
-    let name = $('#task-name')[0].value;
-    let projectID = $('#task-project')[0].value;
-    let typeID = $('#task-type')[0].value;
-    let description = $('#task-description')[0].value
-    let noteID = 0;
-    let time_s = $('#task-start')[0].value;
-    let time_d = $('#task-dur')[0].value;
-    let time_r;
+function addTask(){
+    let name        = $('#task-name')[0].value;
+    let projectID   = $('#task-project')[0].value;
+    let typeID      = $('#task-type')[0].value;
+    let description = $('#task-description')[0].value;
+    let time_s      = $('#task-start')[0].value;
+    let time_d      = $('#task-dur')[0].value;
+    let noteID      = 0;//TO DO
+    let time_r      = 0;//TO DO
 
     Application.TaskList.add(
-        name, projectID, typeID, description, noteID, time_s, time_d, time_r = 0
+        name, projectID, typeID, description, noteID, time_s, time_d, time_r
     );
+
+    $('#task-name')[0].value        = null;
+    $('#task-project')[0].value     = null;
+    $('#task-type')[0].value        = null;
+    $('#task-description')[0].value = null;
+    $('#task-start')[0].value       = null;
+    $('#task-dur')[0].value         = null;
 }
 
 function closeLayer(){
-    if(Application === undefined){return false}
+    if(Application === undefined){return}
     $('.layer.show')[0].classList.remove('show');
 }
 
-function openLayer(el){
-    if(Application === undefined){return false}
-    $(`[layer-data="${el.getAttribute('layer-call')}"]`)[0].classList.add('show');
+function openLayer(element){
+    if(Application === undefined){return}
+    $(`[layer-data="${element.getAttribute('layer-call')}"]`)[0].classList.add('show');
 }
 
 function choosePage(toolbutton){
-    if(Application === undefined){return false}
+    if(Application === undefined){return}
     Application.openPage(toolbutton.getAttribute('for-page'));
 }
 
-function toggleNoteblock(el){
-    el.parentElement.classList.toggle('show');
+function toggleNoteblock(element){
+    element.parentElement.classList.toggle('show');
 }
 
 document.addEventListener("DOMContentLoaded", function(){
     Application = new TimeKeeper(Application);
-    
-
 });

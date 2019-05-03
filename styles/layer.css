@@ -25,9 +25,13 @@
 .layer__toolset{
     height: 110px;
     position: relative;
+
     display: flex;
+    justify-content: space-between;
+
     align-items: center;
     padding: 0 30px;
+    
     background: #fcfcfc;
     border-bottom: 1px solid #a7a9aa;
 
@@ -41,9 +45,6 @@
     
     overflow-x: hidden;
     overflow-y: scroll;
-}
-.layer__content{
-    width: 100%;
 }
 .layer__content.content_wrapped{
     margin: 0 30px;

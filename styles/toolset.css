@@ -2,7 +2,6 @@
     width: 70px;
     height: 70px;
     cursor: pointer;
-    background: rgba(101,175,128,0.2);
 }
 .tool + .tool{
     margin-left: 10px;
@@ -48,4 +47,28 @@
     background: url(../img/icons/qr-scan.svg) center no-repeat;
     background-size: 46px;
     background-position-y: 11px;
+}
+
+
+/* ### ICONS ###*/
+.icon{
+    min-width: 34px;
+    min-height: 34px;
+    display: inline-block;
+    vertical-align: middle;
+    transform: translateY(-4px);
+    margin-right: 15px;
+    background-size: 100% !important;
+}
+.icon.notegr{
+    background: url(../img/icons/notegroup.svg) center no-repeat;
+}
+.icon.notebl{
+    background: url(../img/icons/noteblock.svg) center no-repeat;
+}
+.icon.note{
+    background: url(../img/icons/note.svg) center no-repeat;
+    background-size: 34px !important;
+    min-width: 20px;
+    background-position-x: -7px;
 }

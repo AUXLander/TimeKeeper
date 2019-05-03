@@ -145,7 +145,7 @@ class TimeKeeper{
         }
         document.body.setAttribute('current-page', page);
     }
-    updateProjects(){
+    updateProjects(callback = undefined){
         var updProjects = new XMLHttpRequest();
         updProjects.onreadystatechange = function(){
             if (this.readyState == 4) { 
@@ -165,10 +165,13 @@ class TimeKeeper{
                         return;
                     }
 
-                    projectData.length = 0;
+                    //projectData.length = 0;
+                    //TO DO
                     while(json.length){
                         projectData.push(json.pop());
                     }
+
+                    Application.setProjectOptions();
 
                     this.abort();
                 }
@@ -198,17 +201,48 @@ class TimeKeeper{
                         return;
                     }
 
-                    typeData.length = 0;
+                    //typeData.length = 0;
+                    //TO DO
                     while(json.length){
                         typeData.push(json.pop());
                     }
                     
+                    Application.setTypeOptions();
+
                     this.abort();
                 }
             }
         }
         updTypes.open('GET', '/php/type/getTypes.php', true); 
         updTypes.send(null);
+    }
+    setProjectOptions(){
+        let elements = $('.project-selector');
+        for(let i = 0; i < elements.length; i++){
+            let options = [];
+            elements[i].innerHTML = null;
+            for(let j = 0; j < projectData.length; j++){
+                options.push(document.createElement('option'));
+                options[j].setAttribute('value', projectData[j].projectID);
+                options[j].innerHTML = projectData[j].project_name;
+                elements[i].appendChild(options[j]);
+            }
+            options[0].setAttribute('selected');
+        }
+    }
+    setTypeOptions(){
+        let elements = $('.type-selector');
+        for(let i = 0; i < elements.length; i++){
+            let options = [];
+            elements[i].innerHTML = null;
+            for(let j = 0; j < typeData.length; j++){
+                options.push(document.createElement('option'));
+                options[j].setAttribute('value', typeData[j].typeID);
+                options[j].innerHTML = typeData[j].type_name;
+                elements[i].appendChild(options[j]);
+            }
+            options[0].setAttribute('selected');
+        }
     }
 }
 
@@ -296,7 +330,7 @@ class TaskList{
         //this.getByDate(Date.now());
 		//this.loadByDate(Date.now());
 
-		//To save in local storage
+		//DO TO save in local storage
 		this.localTaskID = 0;
     }
     loadTimestamps(){
@@ -403,6 +437,7 @@ class TaskList{
     }
     add(name, projectID, typeID, descript, noteID, time_s, time_d, time_r = 0){
         var addTaskReq = new XMLHttpRequest();
+        
         addTaskReq.onreadystatechange = function(){
             if (this.readyState == 4) { 
                 if(this.status == 200) { 
@@ -426,13 +461,20 @@ class TaskList{
                     }
 
 
-                    let tempTask = json.pop(); 
-                    taskData.push(tempTask);
+                    let tempTask = json.pop();
+                    for(let i = taskData.length - 1; i >= 0; i++){
+                        if(taskData[i].taskID == -1){
+                            taskData[i].taskID = tempTask.taskID;
+                            tempTask = {};
+                        }
+                    }
+                    if(Object.keys(tempTask).length > 0){
+                        taskData.push(tempTask);
+                        Application.TaskList.scrollToTask(
+                            Application.TaskList.draw(tempTask)
+                        );
+                    }
 
-                    Application.TaskList.scrollToTask(
-                        Application.TaskList.draw(tempTask)
-                    );
-                    
                     this.abort();
                 }
             }
@@ -441,8 +483,27 @@ class TaskList{
         time_s = Application.DateControl.timeToFloat(time_s) * UTHou;
         time_d = Application.DateControl.timeToFloat(time_d) * UTHou;
 
-        let date;
 
+        let tempTask = {
+            date : Application.DateControl.selectedDate,
+            description : descript,
+            name : name,
+            noteID : noteID,
+            projectID : projectID,
+            taskID : -1,
+            time_d : time_d,
+            time_r : time_r,
+            time_s : time_s,
+            typeID : typeID,
+            taskID : -1
+        }
+        console.log(tempTask);
+        taskData.push(tempTask);
+        Application.TaskList.scrollToTask(
+            Application.TaskList.draw(tempTask)
+        );
+
+        let date;
         projectID = encodeURIComponent(projectID);
         typeID    = encodeURIComponent(typeID);
         noteID    = encodeURIComponent(noteID);
@@ -627,11 +688,11 @@ class SmartFridge{
     }
 }
 
-var video = $('#qr-video')[0];
-var camHasCamera = $('#cam-has-camera')[0];
-var camQrResult = $('#cam-qr-result')[0]; 
-var fileSelector = $('#file-selector')[0];
-var fileQrResult =  $('#file-qr-result')[0];
+var video           = $('#qr-video')[0];
+var camHasCamera    = $('#cam-has-camera')[0];
+var camQrResult     = $('#cam-qr-result')[0]; 
+var fileSelector    = $('#file-selector')[0];
+var fileQrResult    = $('#file-qr-result')[0];
 
 class QRScanner {
     static hasCamera() {
@@ -965,7 +1026,7 @@ class QRCam{
     }
 
 }
-    
+
 function setResult(label, result) {
     label.textContent = result;
 }

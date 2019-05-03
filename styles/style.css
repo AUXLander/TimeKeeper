@@ -19,27 +19,26 @@ button{
     padding: 0;
     outline: 0;
     border: none;
-    -webkit-appearance: none;
-    appearance: none;
     background: transparent;
 }
 [hidden]{
     display: none !important;
 }
-::-ms-clear {
-  display: none;
-}
+::-ms-clear,
 ::-webkit-clear-decoration,
 ::-webkit-clear-cancel-button,
 ::-webkit-clear-results-button,
 ::-webkit-clear-results-decoration { 
   display: none; 
 }
-::-webkit-search-cancel-button,
-::-webkit-search-results-button { 
-    -webkit-appearance: none; 
-}
 
+::-webkit-search-cancel-button,
+::-webkit-search-results-button,
+input[type="time"], select, button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
 
 @font-face{
     font-family: LuciaGrade;
@@ -70,7 +69,7 @@ header{
 
     scrollbar-width: none;
 
-    border-bottom: 1px solid #000;
+    border-bottom: 1px solid #c7c7cb;
 }
 main{
     flex: 1;
@@ -200,13 +199,9 @@ main{
 
 .tasklist-wrap{
     display: flex;
-
     user-select: none;
     position: relative;
-
     min-height: 100%;
-    
-
     margin-top: 30px;
     margin-bottom: 30px;
 }
@@ -215,12 +210,10 @@ main{
     padding-right: 10px;
     border-right: 1px solid #dfdee0;
     
-
     font-size: 40px;
     color: #777778;
 }
 .timestamp{
-    
     height: 150px;
     
     min-height: 150px;
@@ -298,7 +291,6 @@ main{
     overflow: hidden;
 }
 
-
 .text-btn{
     cursor: pointer;
     font-size: 25px;
@@ -307,7 +299,7 @@ main{
 }
 
 footer{
-    border-top: 1px solid #000;
+    border-top: 1px solid #c7c7cb;
 }
 .footer__wrap{
     margin: 10px 0;
@@ -318,6 +310,7 @@ footer{
     font-weight: 600;
     color: rgb(64,73,84);
     line-height: 1.14em;
+    transform: translateX(-4px);
 }
 .flexlist{
     display: flex;
@@ -332,28 +325,47 @@ footer{
 .noteblock{
     width: 100%;
     overflow: hidden;
-    background: rgba(0,0,0,.1);
 
-    font-size: 35px;
+    font-size: 30px;
 }
 .noteblock label{
     width: 100%;
+    position: relative;
     white-space: nowrap;
     cursor: pointer;
     overflow: hidden;
 
     transition: .2s ease;
-    padding: 0 25px;
+    padding: 0 30px;
 
     height: 90px;
 }
+.noteblock label::after{
+    display: block;
+    content: '';
+    position: absolute;
+    height: 1px;
+    bottom: 1px;
+    left: 0;
+    right: 0;
+    background: #c7c7cb;
+}
+.noteblock .noteblock label{
+    padding: 0;
+}
+
 .noteblock label span{
-    line-height: 2.4em;
+    line-height: 3em;
 }
 .noteblock__wrap{
     width: 100%;
-    padding-left: 30px;
+    padding-left: 87px;
 }
+.noteblock__wrap .noteblock__wrap{
+    padding-left: 60px;
+}
+
+
 .noteblock > .noteblock__wrap > .noteblock label{
     height: 0;
 }
@@ -389,32 +401,33 @@ footer{
     padding: 0 0 2px;
     margin-bottom: 29px;
 }
+.txt_f.center{
+    text-align: center;
+}
 
 .txt_f input,
+.txt_f select,
 .txt_f textarea{
     width: 100%;
-
     outline: 0;
-
     background: #fefefe;
-    
     padding: 27px 50px;
-    
     line-height: 1;
     font-size: 24px;
     color: #69aacc;
     font-weight: 300;
     text-align: left;
-
     border: 0;
-
     border-top: 1px solid #c7c7cb;
-    border-bottom: 1px solid #c7c7cb;
-
-    margin: 0 0 -2px;
-
     resize: none;
 }
+.txt_f input:last-child,
+.txt_f select:last-child,
+.txt_f textarea:last-child{
+    border-bottom: 1px solid #c7c7cb;
+}
+
+
 .txt_f textarea{
     height: 200px;
 }
@@ -429,6 +442,7 @@ footer{
     padding: 0 30px;
 }
 .txt_f.center label,
+.txt_f.center select,
 .txt_f.center input{
     text-align: center;
 }
@@ -535,7 +549,8 @@ footer{
 
     white-space: nowrap;
 
-    color: inherit;
+    /*color: inherit;*/
+    color: white;
 
     text-transform: uppercase;
 }
@@ -565,14 +580,13 @@ footer{
     bottom: -10px;
 }
 
-
 .table{
     margin: 0 -30px;
     max-width: initial;
     width: initial;
     overflow-x: scroll;
     
-    font-size: 24px;
+    font-size: 20px;
 }
 .table__wrap{
     width: initial;
@@ -584,7 +598,7 @@ footer{
     display: flex;
     flex-wrap: nowrap;
     justify-content: space-between;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #c7c7cb;
 }
 .table__row.yellow{
     background: rgba(255, 201, 14, .2);
@@ -594,7 +608,9 @@ footer{
 }
 
 .table__cell{
-    flex: 1;
+    width: 20%;
+    min-width: 20%;
+    max-width: 20%;
     padding: 15px 30px;
     line-height: 1em;
     text-align: center;
@@ -605,4 +621,15 @@ footer{
 }
 .table__cell:last-child{
     text-align: right;
+}
+
+.scanCam__video{
+    width: 100%;
+    height: calc(100vh - 450px);
+    margin-bottom: 25px;
+    background: #000;
+}
+
+header > [page="notes"]{
+    margin-top: 58px;
 }
