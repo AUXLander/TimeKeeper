@@ -6,6 +6,7 @@ const UTSec = 60;
 
 var taskData = [];
 var noteData = [];
+
 var projectData = [
     {
         projectID: -1,

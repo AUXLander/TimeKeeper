@@ -1,9 +1,9 @@
 <?php 
     require('../auth/auth.php');
 
-    $sql = 'SELECT * FROM `note_data` WHERE userID = ?s AND noteID=?s';
+    $sql = 'SELECT * FROM `note_data` WHERE userID = ?s';
 
-    $result = $db->query($sql, $_SESSION['userID'], $_GET['noteID']);
+    $result = $db->getAll($sql, $_SESSION['userID']);
 
     if (!($result)) {
         die('Ошибка запроса: ' . $db->error);

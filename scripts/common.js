@@ -16,6 +16,8 @@ class TimeKeeper{
         this.TaskList;// = new TaskList(app);
         this.SmartFridge;// = new SmartFridge();
         this.QRCam;
+        this.NoteManager;
+        this.TypesAndOptions = false;
         //this.CheckScan = new CheckScan(app);
         //Callbacks for click
 
@@ -116,7 +118,10 @@ class TimeKeeper{
             this.SmartFridge = new SmartFridge();
         }
         if(this.QRCam == undefined){
-            this.QRCam = new QRCam();
+            //this.QRCam = new QRCam();
+        }
+        if(this.NoteManager == undefined){
+            this.NoteManager = new NoteManager();
         }
 
         //Обновляем данные
@@ -227,8 +232,11 @@ class TimeKeeper{
                 options[j].innerHTML = projectData[j].project_name;
                 elements[i].appendChild(options[j]);
             }
-            options[0].setAttribute('selected');
+            if(options.length > 0){
+                options[0].setAttribute('selected', '');
+            }
         }
+        this.setNotes();
     }
     setTypeOptions(){
         let elements = $('.type-selector');
@@ -241,8 +249,18 @@ class TimeKeeper{
                 options[j].innerHTML = typeData[j].type_name;
                 elements[i].appendChild(options[j]);
             }
-            options[0].setAttribute('selected');
+            if(options.length > 0){
+                options[0].setAttribute('selected', '');
+            }
         }
+        this.setNotes();
+    }
+    setNotes(){
+        if(this.TypesAndOptions){
+            this.TypesAndOptions = false;
+            return Application.NoteManager.dload();
+        }
+        this.TypesAndOptions = true;
     }
 }
 
@@ -685,6 +703,118 @@ class SmartFridge{
         if(arrstrOFDData[2] == "9282000100147203"){
             //TO DO
         }
+    }
+}
+
+class NoteManager{
+    constructor() {
+        this.noteDataTemp;
+        this.notelist = $('#notelist')[0];
+    }
+    //Синхронизируем данные
+    synch(){
+        //TO DO
+    }
+    //Загружаем все записи
+    dload() {
+        var ajaxNote = new XMLHttpRequest();
+        ajaxNote.onreadystatechange = function() {
+            if (this.readyState == 4) {
+                if(this.status == 200) {
+                    let json;
+                    try{
+                        json = JSON.parse(this.responseText);
+                    }
+                    catch(e){
+                        if(this.responseText != "NULL"){ console.log(e); }
+                        this.abort();
+                        return;
+                    }
+
+                    while(json.length){
+                        noteData.push(json.pop());
+                    }
+                    
+                    Application.NoteManager.clear();
+                    Application.NoteManager.draw();
+
+                    this.abort();
+                    return;
+                }
+            }
+        }
+        ajaxNote.open('GET', '/php/note/getNote.php', true);
+        ajaxNote.send();
+    }
+    //Отправляем записи
+    uload() {
+        //TO DO
+    }
+    //Очищаем вывод
+    clear(){
+        for(let i = 1; i < this.notelist.childElementCount; i++){
+            this.notelist.children[i].remove();
+        }
+    }
+    //Отображаем дерево тип-проект-заметка
+    draw() {
+        this.noteDataTemp = [...noteData];
+        for(let i = 0; i < typeData.length; i++) {
+            this.notelist.appendChild(
+                this.drawType(typeData[i].type_name, typeData[i].typeID)
+            );
+        }
+        this.noteDataTemp.length = 0;
+    }
+    //Строим дерево тип-проект-заметка
+    drawType(name, typeID) {
+        let nextType = {next : null};
+        let parent = tNoteblock(name, 'notegr', nextType);
+        for(let i = 0; i < projectData.length; i++){
+            if(projectData[i].typeID == typeID){
+                nextType.next.appendChild(
+                    this.drawProject(
+                        projectData[i].project_name,
+                        typeID,
+                        projectData[i].projectID
+                    )
+                );
+            }
+        }
+        return parent;
+    }
+    //Строим дерево проект-заметка
+    drawProject(name, typeID, projectID) {
+        let nextType = {next : null};
+        let parent = tNoteblock(name, 'notebl', nextType);
+        for(let i = 0; i < this.noteDataTemp.length; i++){
+            if(this.noteDataTemp[i].typeID == typeID && this.noteDataTemp[i].projectID == projectID){
+                nextType.next.appendChild(
+                    this.drawNote(this.noteDataTemp[i].noteID, "Note ID: " + this.noteDataTemp[i].noteID)
+                );
+                this.noteDataTemp.splice(i, 1);
+            }
+        }
+        return parent;
+    }
+    //Строим дерево заметка
+    drawNote(noteID, name) {
+        let parent = tNoteblock(name, 'note');
+
+        parent.setAttribute('onclick', 'openNote(this);openLayer(this)');
+        parent.setAttribute('layer-call', 'note');
+        parent.setAttribute('note-id', noteID);
+
+        return parent;
+    }
+    //Получаем текст из заметки
+    getNoteTextByID(ID){
+        for(let i = 0; i < noteData.length; i++){
+            if(noteData[i].noteID == ID){
+                return noteData[i].note;
+            }
+        }
+        return null;
     }
 }
 

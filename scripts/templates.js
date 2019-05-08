@@ -35,7 +35,7 @@ var tTask = function(dataObject){
     tdiv.classList.add('task');
 
     for(let i = 0; i < projectData.length; i++){
-        console.log(projectData[i].projectID);
+        //console.log(projectData[i].projectID);
         if(projectData[i].projectID == dataObject.projectID){
             dataObject.projectID = projectData[i].project_name;
             break;
@@ -43,7 +43,7 @@ var tTask = function(dataObject){
     }
 
     for(let i = 0; i < typeData.length; i++){
-        console.log(typeData[i].typeID);
+        //console.log(typeData[i].typeID);
         if(typeData[i].typeID == dataObject.typeID){
             dataObject.typeID = typeData[i].type_name;
             break;
@@ -83,22 +83,23 @@ var tDate = function(dayName, date, fulldate=""){
     return tdiv;
 }
 
-var tNoteblock = function(group, level, name, icon){
+var tNoteblock = function(name, icon, levelEntry = undefined){
     let tdiv = document.createElement('div');
     tdiv.classList.add('noteblock', 'flexlist');
-    tdiv.setAttribute('data-group', '#ID');
-
-    tdiv.setAttribute('data-level', level);
-    
 
     let twrap = document.createElement('div');
     twrap.classList.add('noteblock__wrap', 'flexlist');
 
     tdiv.appendChild(tNote(name, icon));
     tdiv.appendChild(twrap);
-    
+
+    if(levelEntry !== undefined){
+        levelEntry.next = twrap;
+    }
+
     return tdiv;
 }
+
 var tNote = function(name, icon){
     let tlab = document.createElement('label');
     tlab.setAttribute('onclick', 'toggleNoteblock(this)');

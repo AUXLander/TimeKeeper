@@ -84,3 +84,10 @@ function toggleNoteblock(element){
 document.addEventListener("DOMContentLoaded", function(){
     Application = new TimeKeeper(Application);
 });
+
+function openNote(element){
+    if(Application === undefined){return}
+    let noteArea = $('.note-area')[0];
+    noteArea.innerText = null;
+    noteArea.innerText = Application.NoteManager.getNoteTextByID(element.getAttribute('note-id'));
+}
