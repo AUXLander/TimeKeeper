@@ -242,7 +242,7 @@ main{
     
     background: rgba(91,158,116,1);
 
-    min-height: 300px;
+    min-height: 150px;
     /*margin: 0 30px;*/
     
     color: white;
@@ -257,7 +257,7 @@ main{
 }
 .task .task__info{
     padding: 20px;
-    min-height: 130px;
+    min-height: 30px;
     border-radius: 20px;
     background: rgba(101,175,128,1);
 
@@ -313,6 +313,7 @@ footer{
     transform: translateX(-4px);
 }
 .flexlist{
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -357,7 +358,7 @@ footer{
 .noteblock label span{
     line-height: 3em;
 }
-.noteblock__wrap{
+.noteblock .noteblock__wrap{
     width: 100%;
     padding-left: 87px;
 }

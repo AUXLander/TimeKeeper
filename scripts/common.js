@@ -11,20 +11,18 @@ function tcor(key){
 class TimeKeeper{
     constructor(app){
         this.Application = app;
-        this.DateControl;// = new DateControl(app);
-        this.ToolBar;// = new ToolBar(app);
-        this.TaskList;// = new TaskList(app);
-        this.SmartFridge;// = new SmartFridge();
-        this.QRCam;
-        this.NoteManager;
         this.TypesAndOptions = false;
-        //this.CheckScan = new CheckScan(app);
-        //Callbacks for click
 
-        //this.afterAuth()
+        this.QRCam;
+        this.ToolBar;
+        this.TaskList;
+        this.DateControl;
+        this.SmartFridge;
+        this.NoteManager;
 
         this.isAuth();
 
+        //Callbacks for click
         this.waitClick = [];
         document.addEventListener('click', function(){
             while(Application.waitClick.length){
@@ -32,9 +30,9 @@ class TimeKeeper{
             }
         }, true);
 
-        this.isAuthTrigger = false;
         this.email = '';
         this.password ='';
+        this.isAuthTrigger = false;
     }
     isAuth(){
         var isAuth = new XMLHttpRequest();
@@ -118,12 +116,12 @@ class TimeKeeper{
             this.SmartFridge = new SmartFridge();
         }
         if(this.QRCam == undefined){
-            //this.QRCam = new QRCam();
+            this.QRCam = new QRCam();
         }
         if(this.NoteManager == undefined){
             this.NoteManager = new NoteManager();
         }
-
+        
         //Обновляем данные
         this.updateProjects();
         this.updateTypes();
@@ -378,6 +376,7 @@ class TaskList{
                     catch(e){
                         if(this.responseText != "NULL"){
                             console.log(e);
+                            console.log(this.responseText);
                         }
                         this.abort();
                         return;
@@ -465,6 +464,7 @@ class TaskList{
                     }
                     catch(e){
                         console.log(e);
+                        console.log(this.responseText);
                         this.abort();
                         return;
                     }
@@ -711,6 +711,10 @@ class NoteManager{
         this.noteDataTemp;
         this.notelist = $('#notelist')[0];
     }
+    //Сохраняем локально заметку
+    saveNote(){
+        //TO DO
+    }
     //Синхронизируем данные
     synch(){
         //TO DO
@@ -759,26 +763,34 @@ class NoteManager{
     //Отображаем дерево тип-проект-заметка
     draw() {
         this.noteDataTemp = [...noteData];
+        this.projectDataTemp = [...projectData];
         for(let i = 0; i < typeData.length; i++) {
             this.notelist.appendChild(
                 this.drawType(typeData[i].type_name, typeData[i].typeID)
             );
         }
+        for(let i = 0; i < this.noteDataTemp; i++){
+            this.notelist.appendChild(
+                this.drawNote(this.noteDataTemp[i].noteID, "Note ID: " + this.noteDataTemp[i].noteID)
+            );
+        }
         this.noteDataTemp.length = 0;
+        this.projectDataTemp.length = 0;
     }
     //Строим дерево тип-проект-заметка
     drawType(name, typeID) {
         let nextType = {next : null};
         let parent = tNoteblock(name, 'notegr', nextType);
-        for(let i = 0; i < projectData.length; i++){
-            if(projectData[i].typeID == typeID){
+        for(let i = 0; i < this.projectDataTemp.length; i++){
+            if(this.projectDataTemp[i].typeID == typeID){
                 nextType.next.appendChild(
                     this.drawProject(
-                        projectData[i].project_name,
+                        this.projectDataTemp[i].project_name,
                         typeID,
-                        projectData[i].projectID
+                        this.projectDataTemp[i].projectID
                     )
                 );
+                this.projectDataTemp.slice(i, 1);
             }
         }
         return parent;
@@ -790,7 +802,7 @@ class NoteManager{
         for(let i = 0; i < this.noteDataTemp.length; i++){
             if(this.noteDataTemp[i].typeID == typeID && this.noteDataTemp[i].projectID == projectID){
                 nextType.next.appendChild(
-                    this.drawNote(this.noteDataTemp[i].noteID, "Note ID: " + this.noteDataTemp[i].noteID)
+                    this.drawNote(this.noteDataTemp[i].noteID, this.noteDataTemp[i].note.slice(0, 20))
                 );
                 this.noteDataTemp.splice(i, 1);
             }
@@ -1125,7 +1137,7 @@ class QRCam{
     scanCam(){
         if(this.scanner == undefined){
             // ####### Web Cam Scanning #######
-            QRScanner.hasCamera().then(hasCamera => camHasCamera.textContent = hasCamera);
+            QRScanner.hasCamera();//.then(hasCamera => camHasCamera.textContent = hasCamera);
             this.scanner = new QRScanner(video, result => setResult(camQrResult, result));
             this.scanner.start();
             $('#inversion-mode-select')[0].addEventListener('change', event => {
@@ -1136,6 +1148,7 @@ class QRCam{
             this.scanner.start();
         }
     }
+
     scanFile(){
         // ####### File Scanning #######
         //TO DO
@@ -1149,16 +1162,17 @@ class QRCam{
                 .catch(e => setResult(fileQrResult, e || 'No QR code found.'));
         });
     }
+
     stop(){
         if(this.scanner != undefined){
             this.scanner.stop();
         }
     }
-
 }
 
 function setResult(label, result) {
-    label.textContent = result;
+    //label.textContent = result;
+    alert(result);
 }
 
 function DateAddDays(strDate, intDays){

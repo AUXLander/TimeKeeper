@@ -57,42 +57,53 @@
         </div>
 
         <div page="notes" id="notelist" class="notelist flexlist" hidden>
+            <div class="noteblock__wrap flexlist" layer-call="noteList" onclick="openLayer(this)">
+                <div class="noteblock flexlist">
+                    <label onclick="toggleNoteblock(this)">
+                        <span class="icon note"><!-- EMPTY --></span>
+                        <span>Список продуктов</span>
+                    </label>
+                    <div class="noteblock__wrap flexlist">
+                        <!-- EMPTY -->
+                    </div>
+                </div>
+            </div>
+            <!--
             <div class="noteblock flexlist">
                 <label onclick="toggleNoteblock(this)">
-                    <span class="icon notegr"><!-- EMPTY --></span>
+                    <span class="icon notegr"></span>
                     <span>Для дома</span>
                 </label>
                 <div class="noteblock__wrap flexlist">
                     <div class="noteblock flexlist">
                         <label onclick="toggleNoteblock(this)">
-                            <span class="icon notebl"><!-- EMPTY --></span>
+                            <span class="icon notebl"></span>
                             <span>Купить</span>
                         </label>
                         <div class="noteblock__wrap flexlist">
                             <div class="noteblock flexlist" layer-call="note" onclick="openLayer(this)">
                                 <label onclick="toggleNoteblock(this)">
-                                    <span class="icon note"><!-- EMPTY --></span>
+                                    <span class="icon note"></span>
                                     <span>Для салата</span>
                                 </label>
                                 <div class="noteblock__wrap flexlist">
-                                    <!-- EMPTY -->
+                                    
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="noteblock flexlist">
                         <label onclick="toggleNoteblock(this)">
-                            <span class="icon notebl"><!-- EMPTY --></span>
+                            <span class="icon notebl"></span>
                             <span>Куплено</span>
                         </label>
                         <div class="noteblock__wrap flexlist" layer-call="noteList" onclick="openLayer(this)">
                             <div class="noteblock flexlist">
                                 <label onclick="toggleNoteblock(this)">
-                                    <span class="icon note"><!-- EMPTY --></span>
+                                    <span class="icon note"></span>
                                     <span>Список продуктов</span>
                                 </label>
                                 <div class="noteblock__wrap flexlist">
-                                    <!-- EMPTY -->
                                 </div>
                             </div>
                         </div>
@@ -100,7 +111,7 @@
 
                 </div>
             </div>
-
+            -->
         </div> 
 
         <div page="settings" hidden>
@@ -135,12 +146,8 @@
                 <div class="txt_f">
                     <label>Add new</label>
                     <input  id="task-name" type="text" placeholder="Name"/>
+                    <select id="task-type"      class="type-selector"   ></select>
                     <select id="task-project"   class="project-selector"></select>
-                    <select id="task-type"      class="type-selector"></select>
-                    <!--
-                        <input id="task-project" type="text" placeholder="Project"/>
-                        <input id="task-type" type="text" placeholder="Project type"/>
-                    -->
                     <textarea id="task-description" placeholder="Notes"></textarea>
                 </div>
                 <div class="txt_f">
@@ -160,7 +167,7 @@
     <div layer-data="noteList" class="layer right">
         <div class="layer__toolset">
             <button class="text-btn layer__close" onclick="closeLayer()">Cancel</button>
-            <div class="layer__title"><span>Куплено</span></div>
+            <div class="layer__title"><span>Список продуктов</span></div>
         </div>
         <div class="layer__wrap">
             <div class="layer__content">
@@ -189,8 +196,9 @@
 
     <div layer-data="note" class="layer right">
         <div class="layer__toolset">
-            <button class="text-btn layer__close" onclick="closeLayer()">Cancel</button>
+            <button class="text-btn layer__close" onclick="saveNote();closeLayer()">Done</button>
             <div class="layer__title"><span>Куплено</span></div>
+            <button class="text-btn layer__close" onclick="closeLayer()">Cancel</button>
         </div>
         <div class="layer__wrap">
             <div class="layer__content">
@@ -198,25 +206,6 @@
                     <div class="note-item" style="flex: 1">
                         <div class="note-item__wrap">
                             <div class="note-area" contenteditable="true">
-                                Салат "Фунчоза с овощами"<br><br>
-                                Продукты:<br>
-                                Фунчоза - 150 г<br>
-                                Перец болгарский красный - 1-2 шт.<br>
-                                Лук репчатый - 1-2 шт.<br>
-                                Морковь свежая (крупная) - 1 шт.<br>
-                                Огурец свежий - 1 шт.<br>
-                                Соус соевый - по вкусу<br>
-                                Соль - по вкусу<br>
-                                Масло растительное - для обжарки<br>
-                                Кунжут - для украшения<br><br><br>
-
-                                
-                                1) Нарежьте овощи симпатичными брусочками. Для своего удобства морковь я измельчила с помощью овощетерки.<br><br>
-                                2) На хорошо разогретой сковороде обжарьте морковь, лук и перец на растительном масле в течение 10 минут.<br><br>
-                                3) Приготовьте фунчозу по инструкции, указанной на упаковке. Я обычно варю фунчозу ровно 3 минуты, и она получается идеальной, на мой вкус.<br><br>
-                                4) Как только фунчоза будет готова, слейте воду и добавьте обжаренные на сковороде овощи и огурец.<br><br>
-                                Фунчозу с овощами заправьте соевым соусом по вашему вкусу. Для более аппетитного вида я добавляю небольшую горсть кунжута. 
-                                Салат "Фунчоза с овощами" готов к употреблению! Всем приятного аппетита и хорошего настроения!
                             </div>
                         </div>
                     </div>

@@ -23,7 +23,7 @@ var TObject = function(UTValue){
 
 var tTask = function(dataObject){
     let TODuration = TObject(dataObject.time_d);
-    let height = dataObject.time_d*(150/UTHou);
+    let height = dataObject.time_d*(150/UTHou);//TO DO BUG /2 - fix
     let tdiv = document.createElement('div');
     
     tdiv.setAttribute('data-aos', 'fade-up');

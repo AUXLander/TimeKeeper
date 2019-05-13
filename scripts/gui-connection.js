@@ -90,4 +90,9 @@ function openNote(element){
     let noteArea = $('.note-area')[0];
     noteArea.innerText = null;
     noteArea.innerText = Application.NoteManager.getNoteTextByID(element.getAttribute('note-id'));
+
+    $('[layer-data=note] .layer__title span')[0].innerText = element.querySelector('label span:last-child').innerText;
+}
+function saveNote(){
+    //TO DO
 }
