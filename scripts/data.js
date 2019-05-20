@@ -20,7 +20,7 @@ var typeData = [
     {
         typeID: -1,
         userID: 0,
-        type_name: "No type"
+        type_name: "Other"
     }
 ];
 

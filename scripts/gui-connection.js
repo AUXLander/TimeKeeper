@@ -92,7 +92,13 @@ function openNote(element){
     noteArea.innerText = Application.NoteManager.getNoteTextByID(element.getAttribute('note-id'));
 
     $('[layer-data=note] .layer__title span')[0].innerText = element.querySelector('label span:last-child').innerText;
+    $('[layer-data=note]')[0].setAttribute('note-id', element.getAttribute('note-id'));
+    $('[layer-data=note] button')[0].setAttribute('note-id', element.getAttribute('note-id'));
 }
-function saveNote(){
-    //TO DO
+function saveNote(element){
+    for(let i = 0; i < noteData.length; i++){
+        if(noteData[i].noteID == element.getAttribute('note-id')){
+            noteData[i].note = $(`[note-id="${noteData[i].noteID}"] .note-area`)[0].innerText;
+        }
+    }
 }

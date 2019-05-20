@@ -591,6 +591,9 @@ class SmartFridge{
                         this.abort();
                         return;
                     }
+                    
+                    Application.SmartFridge.clean();
+
                     let isset = false;
                     let object = null;
                     let origin_len = productData.length;
@@ -698,6 +701,13 @@ class SmartFridge{
         }
         return array;
     }
+    //Очищает вывод в таблице
+    clean(){
+        let elements = $('#product-table-conteiner > div');
+        for(let i = 1; i < elements.length; i++){
+            elements[i].remove();
+        }
+    }
     //Демонстрационное добавление продуктов с заранее выбранным чеком
     demoOFDproduct(arrstrOFDData){
         var ofd = new XMLHttpRequest();
@@ -706,7 +716,6 @@ class SmartFridge{
                 if(this.status == 200) {
 
                     if(this.responseText != 'false'){
-                        closeLayer();
                         tempScanned.push(this.responseText);
                         Application.SmartFridge.dload();
                     }
@@ -717,15 +726,8 @@ class SmartFridge{
             }
         }
         console.log(arrstrOFDData);
-        //alert(arrstrOFDData[4]);
         ofd.open('GET', '/php/product/addProduct.php?fp=' + arrstrOFDData[4], true);
         ofd.send();
-
-        /*
-        if(arrstrOFDData[2] == "9282000100147203"){
-            //TO DO
-        }
-        */
     }
 }
 
@@ -1196,10 +1198,14 @@ class QRCam{
 function setResult(label, result) {
     //label.textContent = result;
     //alert(result);
+    closeLayer();
     let array = Application.SmartFridge.parseStringOFD(result);
 
     for(let i = 0; i < tempScanned.length; i++){
-        if(tempScanned[i] == array[4]) return;
+        if(tempScanned[i] == array[4]){
+            alert("Данный чек уже зарегистрирован!");
+            return;
+        }
     }
     
 

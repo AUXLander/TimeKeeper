@@ -45,6 +45,16 @@
                 </div>
             </div>
         </div>
+        <div page="settings" hidden>
+            <div class="toolbar wrapper header__calendar">
+                <div class="toobar__wrap">
+                    <label class="row page-title">Settings</label>
+                    <div class="toolbar__toolset toolset">
+                        <!-- ADD BTNS -->
+                    </div>
+                </div>
+            </div>
+        </div>
     </header>
     <main>
         <div page="calendar" class="wrapper tasklist-wrap">
@@ -115,9 +125,27 @@
         </div> 
 
         <div page="settings" hidden>
-            <button id="get-data">GET DATA</button>
+
             <div id="data conteiner">
-                <!-- EMPTY -->    
+                <div style="border-radius: 100%; border: 5px solid #c7c7cb; width:200px; height: 200px; margin: 30px auto;color:#c7c7cb;display: flex;justify-content: center;align-items: center;font-size: 30px;" >
+                    PHOTO
+                </div>
+                <div class="txt_f">
+                    <label>User</label>
+                    <input type="text" placeholder="Name">
+                    <input type="text" placeholder="Last Name">
+                    <input type="text" placeholder="E-mail contacts">
+                </div>
+                <div class="txt_f">
+                    <label>Confidential</label>
+                    <input type="text" placeholder="New Password">
+                    <input type="text" placeholder="Repeat Password">
+                </div>
+                <div class="txt_f center">
+                    <div class="btn_f">
+                        <span>Save</span>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
@@ -196,7 +224,7 @@
 
     <div layer-data="note" class="layer right">
         <div class="layer__toolset">
-            <button class="text-btn layer__close" onclick="saveNote();closeLayer()">Done</button>
+            <button class="text-btn layer__close" onclick="saveNote(this);closeLayer()">Done</button>
             <div class="layer__title"><span>Куплено</span></div>
             <button class="text-btn layer__close" onclick="closeLayer()">Cancel</button>
         </div>
