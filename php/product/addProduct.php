@@ -1,6 +1,8 @@
 <?php
     require('../auth/auth.php');
 
+    $FP = $_GET['fp'];
+
     /*
     $types = [
         'Молочный',
@@ -15,12 +17,75 @@
         'сметана'
     ];
 
+    switch($FP){
+        case '985297909':
+        $products = [
+            'Молоко наша корова'
+        ];
+        break;
+
+        case '1556515712':
+        $products = [
+            'кабачки',
+            'баклажаны'
+        ];
+        break;
+
+        case '2783541425':
+        $products = [
+            'молоко цельное',
+            'сметана шахунья'
+        ];
+        break;
+
+        case '1325754440':
+        $products = [
+            'кефир'
+        ];
+        break;
+
+        case '1411331431':
+        $products = [
+            'кефир'
+        ];
+        break;
+
+        case '3282960892':
+        $products = [
+            'кефир',
+        ];
+        break;
+
+        case '3602068913':
+        $products = [
+            'сыр',
+        ];
+        break;
+
+        case '320556524':
+        $products = [
+            'творог',
+            'творог'
+        ];
+        break;
+
+        case '1377076613':
+        $products = [
+            'биойогурт',
+            'кефир'
+        ];
+        break;
+
+        default: 
+            die('false');
+    }
+
     $regexp_array = [
         //Milk
         [
-            "/моло/ui", // 1
-            "/йогурт/ui", // 2 
-            "/сыр/ui", // 3 
+            "/моло/ui", // 7
+            "/йогурт/ui", // 7 
+            "/сыр/ui", // 6 
             "/твор/ui", // 4 
             "/кефир/ui", // 5
             "/сметана/ui" // 6
@@ -71,7 +136,7 @@
 
     $overdue_array = [
         //Milk
-        [1,2,3,4,5,6],
+        [7,10,6,4,5,6],
         //Meat
         [7,8,9,10,11,12,13,14],
         //Fruts
@@ -88,7 +153,7 @@
     $loggedCount = 0;
     $loggedList = [];
 
-    $time_s = '2019-04-12';
+    $time_s = '2019-05-21';
     
     $sql = 'INSERT INTO product_data(userID, productName, productTypeID, productTime_s, productTime_d, productOverdue) VALUES';
 
@@ -128,6 +193,8 @@
         die('Ошибка запроса: ' . $db->error);
     }
     else{
+        //TO DO
+        die($FP);
         echo json_encode($result, JSON_UNESCAPED_UNICODE);
     }
 

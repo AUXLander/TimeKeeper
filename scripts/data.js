@@ -7,6 +7,8 @@ const UTSec = 60;
 var taskData = [];
 var noteData = [];
 
+var tempScanned = [];
+
 var projectData = [
     {
         projectID: -1,

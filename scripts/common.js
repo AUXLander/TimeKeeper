@@ -700,9 +700,32 @@ class SmartFridge{
     }
     //Демонстрационное добавление продуктов с заранее выбранным чеком
     demoOFDproduct(arrstrOFDData){
+        var ofd = new XMLHttpRequest();
+        ofd.onreadystatechange = function() {
+            if (this.readyState == 4) {
+                if(this.status == 200) {
+
+                    if(this.responseText != 'false'){
+                        closeLayer();
+                        tempScanned.push(this.responseText);
+                        Application.SmartFridge.dload();
+                    }
+                    
+                    this.abort();
+                    return;
+                }
+            }
+        }
+        console.log(arrstrOFDData);
+        //alert(arrstrOFDData[4]);
+        ofd.open('GET', '/php/product/addProduct.php?fp=' + arrstrOFDData[4], true);
+        ofd.send();
+
+        /*
         if(arrstrOFDData[2] == "9282000100147203"){
             //TO DO
         }
+        */
     }
 }
 
@@ -1172,7 +1195,16 @@ class QRCam{
 
 function setResult(label, result) {
     //label.textContent = result;
-    alert(result);
+    //alert(result);
+    let array = Application.SmartFridge.parseStringOFD(result);
+
+    for(let i = 0; i < tempScanned.length; i++){
+        if(tempScanned[i] == array[4]) return;
+    }
+    
+
+    Application.SmartFridge.demoOFDproduct(array);
+
 }
 
 function DateAddDays(strDate, intDays){
